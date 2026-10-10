@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Echelon Young Innovators Hackathon 2026</title>
+  <meta name="description" content="An inter-school hackathon by the Department of Computer Science and Engineering, Echelon Institute of Technology, Faridabad. Grand finale 21 November 2026.">
+  <meta name="theme-color" content="#0B1F3A">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- ============================================================
+     NAVIGATION BAR
+     ============================================================ -->
+<header class="navbar">
+  <div class="container nav-inner">
+
+    <a href="#home" class="logo">
+      <!-- Replace this span with <img src="logo.png" alt="..." class="logo-img">
+           once your graphic student makes the logo. -->
+      <span class="logo-mark">EYI</span>
+      <span class="logo-text">Young Innovators</span>
+    </a>
+
+    <nav id="site-nav" class="nav-links" aria-label="Main navigation">
+      <a href="#about">About</a>
+      <a href="#timeline">Timeline</a>
+      <a href="#eligibility">Who can join</a>
+      <a href="#prizes">Prizes</a>
+      <a href="#faqs">FAQs</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <a href="#register" class="btn btn-small nav-cta">Register</a>
+
+    <button id="menu-toggle" class="menu-toggle" aria-label="Open menu"
+            aria-expanded="false" aria-controls="site-nav">
+      <span class="menu-bar"></span>
+      <span class="menu-bar"></span>
+      <span class="menu-bar"></span>
+    </button>
+
+  </div>
+</header>
+
+<main>
+
+  <!-- ============================================================
+       HERO
+       ============================================================ -->
+  <section class="hero" id="home">
+    <div class="container">
+
+      <p class="eyebrow">Echelon Institute of Technology, Faridabad</p>
+
+      <h1 class="hero-title">Echelon Young&nbsp;Innovators Hackathon 2026</h1>
+
+      <p class="hero-tagline">
+        Nine hours. One idea. A working prototype you built yourself.
+        An inter-school hackathon for students who would rather make something than read about it.
+      </p>
+
+      <!-- Countdown. Numbers are filled in by script.js -->
+      <div class="countdown" id="countdown">
+        <p class="countdown-label" id="countdown-label">Loading countdown</p>
+        <div class="countdown-row">
+          <div class="countdown-unit">
+            <span class="countdown-value" id="cd-days">--</span>
+            <span class="countdown-name">days</span>
+          </div>
+          <div class="countdown-unit">
+            <span class="countdown-value" id="cd-hours">--</span>
+            <span class="countdown-name">hours</span>
+          </div>
+          <div class="countdown-unit">
+            <span class="countdown-value" id="cd-mins">--</span>
+            <span class="countdown-name">minutes</span>
+          </div>
+          <div class="countdown-unit">
+            <span class="countdown-value" id="cd-secs">--</span>
+            <span class="countdown-name">seconds</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-buttons">
+        <a href="#register" class="btn">Register your team</a>
+        <a href="#about" class="btn btn-outline">What is this?</a>
+      </div>
+
+      <!-- Quick facts -->
+      <dl class="facts">
+        <div class="fact">
+          <dt>Grand finale</dt>
+          <dd>21 November 2026</dd>
+        </div>
+        <div class="fact">
+          <dt>Format</dt>
+          <dd>Online round, offline finale</dd>
+        </div>
+        <div class="fact">
+          <dt>Team size</dt>
+          <dd>2 to 4 students</dd>
+        </div>
+        <div class="fact">
+          <dt>Build time</dt>
+          <dd>9 hours</dd>
+        </div>
+      </dl>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       ABOUT
+       ============================================================ -->
+  <section class="section" id="about">
+    <div class="container about-grid">
+
+      <div>
+        <h2>Ideas are easy. Building one is the hard part.</h2>
+        <p>
+          The Echelon Young Innovators Hackathon 2026 is an inter-school hackathon hosted by the
+          Department of Computer Science and Engineering at Echelon Institute of Technology,
+          Faridabad.
+        </p>
+        <p>
+          School students form small teams, pick a problem worth solving, and build a working
+          prototype. Teams that clear the online round come to campus for a nine-hour finale and
+          present what they have built to industry mentors and judges.
+        </p>
+        <p>
+          You do not need to have done this before. You need a team, an idea, and a willingness
+          to spend a day figuring things out.
+        </p>
+      </div>
+
+      <ul class="highlights">
+        <li>
+          <h3>Build, don't just pitch</h3>
+          <p>You leave with a prototype that runs, not a slide deck about one.</p>
+        </li>
+        <li>
+          <h3>Mentors on the floor</h3>
+          <p>Industry mentors are there through the finale to unblock you.</p>
+        </li>
+        <li>
+          <h3>Judged on the work</h3>
+          <p>Present to a panel of judges at the end of the day.</p>
+        </li>
+      </ul>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       TIMELINE
+       ============================================================ -->
+  <section class="section section-alt" id="timeline">
+    <div class="container">
+      <h2>How the hackathon runs</h2>
+
+      <ol class="timeline">
+        <li>
+          <span class="timeline-dot" aria-hidden="true"></span>
+          <p class="timeline-date">12 October to 30 October 2026</p>
+          <h3>Registration</h3>
+          <p>Form your team and register. Registration is open to school students.</p>
+        </li>
+        <li>
+          <span class="timeline-dot" aria-hidden="true"></span>
+          <p class="timeline-date">31 October to 5 November 2026</p>
+          <h3>Online round</h3>
+          <p>Submit your idea online. Shortlisted teams go through to the finale.</p>
+        </li>
+        <li>
+          <span class="timeline-dot" aria-hidden="true"></span>
+          <p class="timeline-date">10 November 2026</p>
+          <h3>Results of the online round</h3>
+          <p>Shortlisted teams are announced and invited to campus.</p>
+        </li>
+        <li>
+          <span class="timeline-dot timeline-dot-final" aria-hidden="true"></span>
+          <p class="timeline-date">21 November 2026, 9:00 AM to 6:00 PM</p>
+          <h3>Offline grand finale</h3>
+          <p>Nine hours of building at Echelon Institute of Technology, Faridabad, followed by
+             presentations to the judges.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       ELIGIBILITY AND RULES
+       ============================================================ -->
+  <section class="section" id="eligibility">
+    <div class="container">
+      <h2>Who can take part</h2>
+
+      <div class="rules">
+        <div class="rule">
+          <h3>School students</h3>
+          <p>This is an inter-school hackathon, open to school students.</p>
+        </div>
+        <div class="rule">
+          <h3>Teams of 2 to 4</h3>
+          <p>You cannot enter alone. Minimum two members, maximum four.</p>
+        </div>
+        <div class="rule">
+          <h3>One school per team</h3>
+          <p>Every member of a team must be from the same school.</p>
+        </div>
+        <div class="rule">
+          <h3>Online, then on campus</h3>
+          <p>The first round is online. Shortlisted teams attend the finale in person.</p>
+        </div>
+        <div class="rule">
+          <h3>Nine hours to build</h3>
+          <p>The finale runs 9:00 AM to 6:00 PM on 21 November 2026.</p>
+        </div>
+        <div class="rule rule-pending">
+          <h3>Detailed rules</h3>
+          <p>Submission format, judging criteria and the code of conduct will be announced.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       PRIZES
+       ============================================================ -->
+  <section class="section section-alt" id="prizes">
+    <div class="container">
+      <h2>Prizes</h2>
+      <p class="section-intro">
+        Prize details are being finalised and will be announced before registration closes.
+      </p>
+
+      <div class="prize-row">
+        <div class="prize-card prize-card-first">
+          <p class="prize-rank">First place</p>
+          <p class="prize-value">To be announced</p>
+        </div>
+        <div class="prize-card">
+          <p class="prize-rank">Second place</p>
+          <p class="prize-value">To be announced</p>
+        </div>
+        <div class="prize-card">
+          <p class="prize-rank">Third place</p>
+          <p class="prize-value">To be announced</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       REGISTRATION CALL TO ACTION
+       ============================================================ -->
+  <section class="section register" id="register">
+    <div class="container register-inner">
+      <h2>Registration closes 30 October 2026</h2>
+      <p>
+        Get your team of two to four together and sign up. The registration link will be
+        published here as soon as it is live.
+      </p>
+      <!-- When the Unstop link is ready, change href="#register" to the real URL
+           and remove the aria-disabled attribute. -->
+      <a href="#register" class="btn btn-lg" aria-disabled="true">Registration link coming soon</a>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       FAQs
+       ============================================================ -->
+  <section class="section" id="faqs">
+    <div class="container faq-grid">
+      <h2>Questions</h2>
+
+      <div class="faq-list">
+        <details>
+          <summary>Who can participate?</summary>
+          <p>School students, in teams of two to four. All members of a team must be from the
+             same school.</p>
+        </details>
+
+        <details>
+          <summary>When and where is the finale?</summary>
+          <p>21 November 2026, 9:00 AM to 6:00 PM, at Echelon Institute of Technology,
+             Faridabad.</p>
+        </details>
+
+        <details>
+          <summary>Is the whole event in person?</summary>
+          <p>No. The first round runs online from 31 October to 5 November 2026. Only shortlisted
+             teams attend the finale on campus.</p>
+        </details>
+
+        <details>
+          <summary>Can I take part on my own?</summary>
+          <p>No. The minimum team size is two.</p>
+        </details>
+
+        <details>
+          <summary>Do I need to know how to code already?</summary>
+          <p>Some coding ability in the team helps, but the hackathon is aimed at school students
+             and beginners are welcome.</p>
+        </details>
+
+        <details>
+          <summary>What are the themes or problem statements?</summary>
+          <p>To be announced before the online round opens.</p>
+        </details>
+
+        <details>
+          <summary>How do we register?</summary>
+          <p>The registration link will be published on this page. Registration is open from
+             12 October to 30 October 2026.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CONTACT
+       ============================================================ -->
+  <section class="section section-alt" id="contact">
+    <div class="container contact-grid">
+
+      <div>
+        <h2>Contact</h2>
+        <p>
+          Organised by the Department of Computer Science and Engineering,
+          Echelon Institute of Technology, Faridabad.
+        </p>
+      </div>
+
+      <dl class="contact-details">
+        <div>
+          <dt>Venue</dt>
+          <dd>Echelon Institute of Technology, Faridabad, Haryana</dd>
+        </div>
+        <div>
+          <dt>Email</dt>
+          <!-- Replace with the real address:
+               <dd><a href="mailto:name@echelon.edu.in">name@echelon.edu.in</a></dd> -->
+          <dd>To be announced</dd>
+        </div>
+        <div>
+          <dt>Phone</dt>
+          <dd>To be announced</dd>
+        </div>
+      </dl>
+
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <p class="footer-title">Echelon Young Innovators Hackathon 2026</p>
+    <p class="footer-meta">
+      Department of Computer Science and Engineering,
+      Echelon Institute of Technology, Faridabad
+    </p>
+    <p class="footer-meta">&copy; <span id="year">2026</span> Echelon Institute of Technology</p>
+    <a href="#home" class="footer-top">Back to top</a>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
