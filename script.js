@@ -23,9 +23,10 @@
    YYYY-MM-DDTHH:MM:SS+05:30   ( +05:30 means India time )
    ----------------------------------------------------------- */
 var MILESTONES = [
+  { label: "Registration opens in",   date: "2026-10-12T10:00:00+05:30" },
   { label: "Registration closes in",  date: "2026-10-30T23:59:59+05:30" },
   { label: "Online round closes in",  date: "2026-11-05T23:59:59+05:30" },
-  { label: "Results announced in",    date: "2026-11-10T09:00:00+05:30" },
+  { label: "Results announced in",    date: "2026-11-10T10:00:00+05:30" },
   { label: "Grand finale begins in",  date: "2026-11-21T09:00:00+05:30" }
 ];
 
@@ -244,7 +245,108 @@ function initFlipCards() {
 
 
 /* -----------------------------------------------------------
-   5. FOOTER YEAR
+   5. TIMELINE PROGRESS
+
+   Reads the dates written on each stage in the HTML and marks each
+   one as finished, happening now, or still to come. It also fills
+   the rail up to wherever we are. Nothing here needs editing when a
+   date changes; change the date in index.html and this follows.
+   ----------------------------------------------------------- */
+function initTimeline() {
+  var list = document.getElementById("timeline");
+  var fill = document.getElementById("tl-fill");
+
+  if (!list) { return; }
+
+  var steps = list.querySelectorAll(".tl-step");
+  if (steps.length === 0) { return; }
+
+  var now = Date.now();
+  var lastFinished = -1;
+  var currentIndex = -1;
+
+  for (var i = 0; i < steps.length; i++) {
+    var step = steps[i];
+    var start = new Date(step.getAttribute("data-start")).getTime();
+    var end   = new Date(step.getAttribute("data-end")).getTime();
+
+    // A mistyped date is skipped rather than breaking the whole row
+    if (isNaN(start) || isNaN(end)) { continue; }
+
+    var label = document.createElement("span");
+    label.className = "tl-status";
+
+    if (now > end) {
+      step.classList.add("is-done");
+      label.className += " tl-status-done";
+      label.textContent = "Done";
+      lastFinished = i;
+    } else if (now >= start) {
+      step.classList.add("is-now");
+      label.className += " tl-status-now";
+      label.textContent = "Happening now";
+      currentIndex = i;
+    } else {
+      label.className += " tl-status-next";
+      label.textContent = (i === 0 || lastFinished === i - 1) ? "Up next" : "To come";
+    }
+
+    step.appendChild(label);
+  }
+
+  // How far along the rail to fill. Each stage sits at its own
+  // fraction of the width, so the fill stops under the live stage.
+  if (fill) {
+    var reached = currentIndex >= 0 ? currentIndex : lastFinished;
+    var fraction = reached < 0 ? 0 : (reached / (steps.length - 1));
+    // Published as a variable so the horizontal rail on a laptop and
+    // the vertical rail on a phone can both use the same number.
+    window.setTimeout(function () {
+      fill.style.setProperty("--tl-progress", (fraction * 100).toFixed(1) + "%");
+    }, 300);
+  }
+}
+
+
+/* -----------------------------------------------------------
+   6. REVEAL ON SCROLL
+
+   Sections fade and lift into place the first time they come into
+   view. Skipped entirely for anyone who has asked their device to
+   reduce motion, and if the browser is too old to support it the
+   content simply shows normally.
+   ----------------------------------------------------------- */
+function initReveal() {
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var targets = document.querySelectorAll("[data-reveal]");
+
+  if (targets.length === 0) { return; }
+
+  // No support, or motion turned down: show everything at once
+  if (reduced || typeof window.IntersectionObserver !== "function") {
+    for (var i = 0; i < targets.length; i++) {
+      targets[i].classList.add("is-revealed");
+    }
+    return;
+  }
+
+  var watcher = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-revealed");
+        watcher.unobserve(entry.target);   // only ever happens once
+      }
+    });
+  }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+
+  for (var j = 0; j < targets.length; j++) {
+    watcher.observe(targets[j]);
+  }
+}
+
+
+/* -----------------------------------------------------------
+   7. FOOTER YEAR
    ----------------------------------------------------------- */
 function initYear() {
   var yearEl = document.getElementById("year");
@@ -263,4 +365,6 @@ initCountdown();
 initMenu();
 initBadgeTilt();
 initFlipCards();
+initTimeline();
+initReveal();
 initYear();

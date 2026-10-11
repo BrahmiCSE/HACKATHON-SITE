@@ -457,37 +457,127 @@ p { color: var(--text-dim); }
 .tracks li:last-child .icon { color: var(--yellow); }
 
 
-/* =========== 7. TIMELINE ============================ */
+/* =========== 7. TIMELINE (progress track) ===========
+   Four stages laid along a rail. The filled part of the rail and the
+   "happening now" marker are set by script.js from the real dates.
+   ==================================================== */
 .timeline {
+  position: relative;
   display: grid;
-  gap: 34px;
-  max-width: 640px;
-  margin-top: 40px;
-  padding-left: 30px;
-  border-left: 2px solid var(--navy-line);
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-top: 54px;
+  padding: 0;
+  list-style: none;
 }
 
-.timeline li { position: relative; }
-
-.timeline-dot {
+/* The rail runs behind the numbered circles */
+.tl-rail {
   position: absolute;
-  left: -38px;
-  top: 8px;
-  width: 14px;
-  height: 14px;
+  top: 27px;                 /* half the circle height */
+  left: 8%;
+  right: 8%;
+  height: 3px;
+  background-color: var(--navy-line);
+  border-radius: 3px;
+}
+
+.tl-rail-fill {
+  display: block;
+  height: 100%;
+  width: var(--tl-progress, 0%);   /* script.js sets --tl-progress */
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--blue), var(--yellow));
+  transition: width 1.2s cubic-bezier(0.2, 0.7, 0.3, 1),
+              height 1.2s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+.tl-step {
+  position: relative;
+  text-align: center;
+  padding-top: 0;
+}
+
+/* The numbered circle */
+.tl-node {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  margin: 0 auto 18px;
   border-radius: 50%;
-  background-color: var(--blue);
-  border: 3px solid var(--navy-soft);
+  background-color: var(--navy-soft);
+  border: 3px solid var(--navy-line);
+  transition: border-color 0.3s, background-color 0.3s, transform 0.3s;
 }
 
-.timeline-dot-final { background-color: var(--yellow); }
+.tl-num {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-dim);
+}
 
-.timeline-date {
+.tl-when {
   color: var(--yellow);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  margin-bottom: 2px;
+  margin-bottom: 4px;
 }
+
+.tl-step h3 { font-size: 19px; margin-bottom: 6px; }
+
+.tl-detail { font-size: 15px; max-width: 26ch; margin: 0 auto; }
+
+/* --- Stage states, applied by script.js --- */
+
+/* Finished */
+.tl-step.is-done .tl-node {
+  border-color: var(--blue);
+  background-color: var(--blue);
+}
+.tl-step.is-done .tl-num { color: #fff; }
+
+/* Happening now */
+.tl-step.is-now .tl-node {
+  border-color: var(--yellow);
+  background-color: var(--navy);
+  transform: scale(1.12);
+  box-shadow: 0 0 0 6px rgba(255, 200, 61, 0.16);
+}
+.tl-step.is-now .tl-num { color: var(--yellow); }
+
+/* A pulsing ring, only on the stage happening right now */
+.tl-step.is-now .tl-node::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid var(--yellow);
+  animation: tl-pulse 2.4s ease-out infinite;
+}
+
+@keyframes tl-pulse {
+  0%   { transform: scale(1);    opacity: 0.9; }
+  100% { transform: scale(1.75); opacity: 0; }
+}
+
+/* The small label that says what is happening */
+.tl-status {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.tl-status-now  { background-color: var(--yellow); color: var(--on-accent); }
+.tl-status-done { background-color: rgba(37, 99, 235, 0.22); color: #9EC0FF; }
+.tl-status-next { background-color: rgba(255,255,255,0.08); color: var(--text-dim); }
 
 
 /* =========== 8. ELIGIBILITY (flip cards) ============
@@ -580,55 +670,72 @@ p { color: var(--text-dim); }
 }
 
 
-/* =========== 9. PRIZES ============================== */
-.prize-row {
+/* =========== 9. PRIZES (podium) =====================
+   Second, first, third from left to right. The first-place block is
+   the tallest, so the order of the prizes is visible before you read
+   a single number.
+   ==================================================== */
+.podium {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  grid-template-columns: 1fr 1.15fr 1fr;
+  align-items: end;
+  gap: 18px;
+  max-width: 760px;
+  margin-top: 46px;
+  /* The floor the blocks stand on. Without it they look cut off
+     where the section ends. */
+  padding-bottom: 0;
+  border-bottom: 2px solid var(--navy-line);
 }
 
-.prize-card {
-  background-color: var(--navy);
-  border: 1px solid var(--navy-line);
-  border-radius: 14px;
-  padding: 30px 24px;
-  text-align: center;
-}
+.pod { text-align: center; }
 
-.prize-card-first {
-  border-color: var(--yellow);
-  background:
-    linear-gradient(180deg, rgba(255, 200, 61, 0.12), transparent 70%),
-    var(--navy);
-}
+.pod .icon { margin: 0 auto 10px; display: block; }
 
-.prize-card .icon {
-  margin: 0 auto 12px;       /* centred inside the card */
-  display: block;
-}
-
-/* The winner's trophy is yellow, the other two stay blue */
-.prize-card-first .icon { color: var(--yellow); }
-
-.prize-rank {
-  color: var(--text);
-  font-weight: 600;
-  font-size: 18px;
-  margin-bottom: 4px;
-}
-
-.prize-value {
-  font-size: 30px;
+.pod-amount {
+  font-size: 26px;
   font-weight: 700;
   color: var(--text);
   letter-spacing: -0.02em;
+  margin-bottom: 12px;
 }
 
-/* The winning amount is the one number people look for */
-.prize-card-first .prize-value {
-  font-size: 38px;
+/* The block each team stands on */
+.pod-block {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px 12px 0 0;
+  border: 1px solid var(--navy-line);
+  border-bottom: none;
+  background: linear-gradient(180deg, var(--navy-soft), rgba(30, 58, 99, 0.25));
+}
+
+.pod-rank {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-dim);
+}
+
+/* Heights carry the ranking */
+.pod-1 .pod-block { height: 136px; }
+.pod-2 .pod-block { height: 96px; }
+.pod-3 .pod-block { height: 68px; }
+
+/* First place is the one that should catch the eye */
+.pod-1 .icon { color: var(--yellow); }
+
+.pod-1 .pod-amount {
+  font-size: 36px;
   color: var(--yellow);
 }
+
+.pod-1 .pod-block {
+  border-color: rgba(255, 200, 61, 0.55);
+  background: linear-gradient(180deg, rgba(255, 200, 61, 0.22), rgba(255, 200, 61, 0.04));
+}
+
+.pod-1 .pod-rank { color: var(--yellow); }
 
 
 /* =========== 10. REGISTER =========================== */
@@ -751,10 +858,88 @@ p { color: var(--text-dim); }
     gap: 32px;
   }
 
-  .rules,
-  .prize-row {
+  .rules {
     grid-template-columns: 1fr;
   }
+
+  /* Timeline turns into a vertical list, rail down the left */
+  .timeline {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .tl-rail {
+    top: 10px;
+    bottom: 10px;
+    left: 26px;
+    right: auto;
+    width: 3px;
+    height: auto;
+  }
+
+  .tl-rail-fill {
+    /* The rail runs downwards here, so progress is a height */
+    width: 100%;
+    height: var(--tl-progress, 0%);
+    background: linear-gradient(180deg, var(--blue), var(--yellow));
+  }
+
+  .tl-step {
+    display: grid;
+    grid-template-columns: 54px 1fr;
+    column-gap: 18px;
+    text-align: left;
+    align-items: start;
+  }
+
+  .tl-node { grid-row: 1 / span 4; margin: 0; }
+
+  .tl-detail { margin: 0; max-width: none; }
+
+  .tl-step.is-now .tl-node { transform: none; }
+
+  /* Without this the pill stretches the full width of the column */
+  .tl-status { justify-self: start; }
+
+  /* Podium becomes a simple stack, tallest first */
+  .podium {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    max-width: none;
+  }
+
+  .pod-1 { order: -1; }
+
+  .pod-block { height: 56px !important; border-radius: 12px; border-bottom: 1px solid var(--navy-line); }
+
+  .pod { 
+    display: flex; 
+    align-items: center; 
+    gap: 14px; 
+    text-align: left;
+    background-color: var(--navy-soft);
+    border: 1px solid var(--navy-line);
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+
+  .pod .icon { margin: 0; }
+
+  .pod-amount { margin: 0; font-size: 24px; }
+
+  .pod-1 .pod-amount { font-size: 28px; }
+
+  .pod-block,
+  .pod-1 .pod-block {
+    height: auto !important;
+    background: none;
+    border: none !important;
+    margin-left: auto;
+    padding: 0;
+  }
+
+  /* No podium floor in the stacked layout, it reads as a stray line */
+  .podium { border-bottom: none; }
 
   .facts { grid-template-columns: repeat(2, 1fr); }
 }
@@ -820,8 +1005,31 @@ p { color: var(--text-dim); }
 }
 
 
+/* --- Reveal on scroll ---
+   Marked elements start slightly low and faded, then settle into
+   place the first time they scroll into view. script.js adds the
+   is-revealed class. If the script fails for any reason, the
+   fallback below still shows everything. */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+[data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+/* Safety net: if JavaScript never runs, nothing stays invisible */
+@media (scripting: none) {
+  [data-reveal] { opacity: 1; transform: none; }
+}
+
+
 /* Respect people who have reduced motion turned on in their device settings */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   * { transition: none !important; animation: none !important; }
+  [data-reveal] { opacity: 1; transform: none; }
 }
