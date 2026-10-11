@@ -346,7 +346,132 @@ function initReveal() {
 
 
 /* -----------------------------------------------------------
-   7. FOOTER YEAR
+   7. CUSTOM CURSOR
+
+   A dot that sits exactly on the pointer and a ring that trails
+   behind it. The ring catches up a fraction of the distance on
+   every frame, which is what gives it the lag.
+
+   Only runs where there is a real mouse. The native cursor is
+   hidden only after this is working, so if anything here fails
+   the visitor still has an ordinary pointer.
+   ----------------------------------------------------------- */
+function initCursor() {
+  var ring = document.getElementById("cursor-ring");
+  var dot  = document.getElementById("cursor-dot");
+
+  if (!ring || !dot) { return; }
+
+  var canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  var reduced  = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!canHover || reduced) { return; }
+
+  // Start both shapes in the middle so they do not jump in from a corner
+  var pointerX = window.innerWidth / 2;
+  var pointerY = window.innerHeight / 2;
+  var ringX = pointerX;
+  var ringY = pointerY;
+
+  var EASING = 0.18;         // how quickly the ring catches up, 0 to 1
+  var started = false;
+
+  document.addEventListener("mousemove", function (event) {
+    pointerX = event.clientX;
+    pointerY = event.clientY;
+
+    if (!started) {
+      started = true;
+      ringX = pointerX;
+      ringY = pointerY;
+      // Only now, once it is definitely working, hide the real cursor
+      document.documentElement.classList.add("has-cursor");
+    }
+  });
+
+  // Hide the pair when the pointer leaves the window
+  document.addEventListener("mouseleave", function () {
+    ring.style.opacity = "0";
+    dot.style.opacity = "0";
+  });
+
+  document.addEventListener("mouseenter", function () {
+    if (started) {
+      ring.style.opacity = "";
+      dot.style.opacity = "";
+    }
+  });
+
+  // Open the ring up over anything you can click
+  var clickable = "a, button, summary, [role='button']";
+
+  document.addEventListener("mouseover", function (event) {
+    if (event.target.closest && event.target.closest(clickable)) {
+      ring.classList.add("is-over");
+    }
+  });
+
+  document.addEventListener("mouseout", function (event) {
+    if (event.target.closest && event.target.closest(clickable)) {
+      ring.classList.remove("is-over");
+    }
+  });
+
+  function frame() {
+    // Move the ring a fraction of the remaining distance each frame
+    ringX += (pointerX - ringX) * EASING;
+    ringY += (pointerY - ringY) * EASING;
+
+    ring.style.transform = "translate(" + ringX.toFixed(1) + "px," + ringY.toFixed(1) + "px)";
+    dot.style.transform  = "translate(" + pointerX + "px," + pointerY + "px)";
+
+    window.requestAnimationFrame(frame);
+  }
+
+  window.requestAnimationFrame(frame);
+}
+
+
+/* -----------------------------------------------------------
+   8. STATUS STRIP
+
+   Writes the live state into the strip at the top of the hero,
+   using the same stage dates as the timeline so the two can
+   never disagree.
+   ----------------------------------------------------------- */
+function initHud() {
+  var out = document.getElementById("hud-state");
+  if (!out) { return; }
+
+  var steps = document.querySelectorAll(".tl-step");
+  var now = Date.now();
+  var text = "SYS \u00B7 ONLINE";
+
+  for (var i = 0; i < steps.length; i++) {
+    var start = new Date(steps[i].getAttribute("data-start")).getTime();
+    var end   = new Date(steps[i].getAttribute("data-end")).getTime();
+    var name  = steps[i].querySelector("h3");
+
+    if (isNaN(start) || isNaN(end) || !name) { continue; }
+
+    var label = name.textContent.trim().toUpperCase();
+
+    if (now >= start && now <= end) {
+      text = label + " \u00B7 LIVE";
+      break;
+    }
+    if (now < start) {
+      text = label + " \u00B7 OPENS SOON";
+      break;
+    }
+  }
+
+  out.textContent = text;
+}
+
+
+/* -----------------------------------------------------------
+   9. FOOTER YEAR
    ----------------------------------------------------------- */
 function initYear() {
   var yearEl = document.getElementById("year");
@@ -366,5 +491,7 @@ initMenu();
 initBadgeTilt();
 initFlipCards();
 initTimeline();
+initHud();
 initReveal();
+initCursor();
 initYear();

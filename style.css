@@ -31,6 +31,14 @@
   --navy-line: #1E3A63;  /* borders and dividers */
 
   --text:      #F4F7FC;  /* main text, near white */
+
+  /* Code typeface, used for anything that is data: times, counts,
+     amounts, status readouts. Never for sentences. These are fonts
+     already on the device, so nothing has to be downloaded. */
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", "Cascadia Mono",
+          "Roboto Mono", Menlo, Consolas, "Liberation Mono", monospace;
+
+  --grid-line: rgba(124, 160, 220, 0.07);   /* the blueprint grid */
   --text-dim:  #A9BBD6;  /* secondary text */
   --on-accent: #241A00;  /* dark text used on the yellow button */
 }
@@ -48,6 +56,25 @@ html {
   /* Stops the sticky navbar covering a heading when you jump to a section */
   scroll-padding-top: 80px;
 }
+
+/* A faint blueprint grid sits behind the whole page. It is drawn with
+   two repeating gradients rather than an image, so it costs nothing. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 64px 64px;
+  /* Fades out towards the bottom so it never fights the text */
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0,0,0,0.35) 60%, transparent 100%);
+          mask-image: linear-gradient(180deg, #000 0%, rgba(0,0,0,0.35) 60%, transparent 100%);
+}
+
+body > * { position: relative; z-index: 1; }
 
 body {
   background-color: var(--navy);
@@ -108,6 +135,9 @@ p { color: var(--text-dim); }
 /* --- Badge: the small yellow pill in the hero --- */
 .badge {
   display: inline-block;
+  font-family: var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   background-color: rgba(255, 200, 61, 0.14);
   border: 1px solid rgba(255, 200, 61, 0.45);
   color: var(--yellow);
@@ -340,8 +370,11 @@ p { color: var(--text-dim); }
 .countdown { margin-top: 38px; }
 
 .countdown-label {
-  font-size: 14px;
+  font-family: var(--mono);
+  font-size: 12px;
   font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--yellow);
   margin-bottom: 8px;
 }
@@ -350,6 +383,7 @@ p { color: var(--text-dim); }
 
 .countdown-value {
   display: block;
+  font-family: var(--mono);
   font-size: clamp(32px, 5vw, 46px);
   font-weight: 700;
   line-height: 1.1;
@@ -358,7 +392,10 @@ p { color: var(--text-dim); }
 
 .countdown-name {
   display: block;
-  font-size: 13px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--text-dim);
 }
 
@@ -381,9 +418,12 @@ p { color: var(--text-dim); }
 }
 
 .fact dt {
+  font-family: var(--mono);
   color: var(--text-dim);
-  font-size: 14px;
-  margin-bottom: 2px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
 }
 
 .fact dd { font-size: 17px; font-weight: 600; }
@@ -540,15 +580,18 @@ p { color: var(--text-dim); }
 }
 
 .tl-num {
+  font-family: var(--mono);
   font-size: 20px;
   font-weight: 700;
   color: var(--text-dim);
 }
 
 .tl-when {
+  font-family: var(--mono);
   color: var(--yellow);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
+  letter-spacing: 0.02em;
   margin-bottom: 4px;
 }
 
@@ -592,6 +635,8 @@ p { color: var(--text-dim); }
 /* The small label that says what is happening */
 .tl-status {
   display: inline-block;
+  font-family: var(--mono);
+  text-transform: uppercase;
   margin-top: 10px;
   padding: 3px 10px;
   border-radius: 999px;
@@ -718,6 +763,7 @@ p { color: var(--text-dim); }
 .pod .icon { margin: 0 auto 10px; display: block; }
 
 .pod-amount {
+  font-family: var(--mono);
   font-size: 26px;
   font-weight: 700;
   color: var(--text);
@@ -737,8 +783,11 @@ p { color: var(--text-dim); }
 }
 
 .pod-rank {
-  font-size: 22px;
+  font-family: var(--mono);
+  font-size: 20px;
   font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: var(--text-dim);
 }
 
@@ -777,8 +826,11 @@ p { color: var(--text-dim); }
   margin: 0 auto 28px;
 }
 
-.register-inner a,
-.faq-list a {
+/* Only plain links get the yellow treatment. Without the :not(.btn)
+   the button inside this section turned yellow on yellow and its
+   text disappeared. */
+.register-inner a:not(.btn),
+.faq-list a:not(.btn) {
   color: var(--yellow);
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -842,11 +894,17 @@ p { color: var(--text-dim); }
 .contact-details { display: grid; gap: 16px; }
 
 .contact-details dt {
+  font-family: var(--mono);
   color: var(--text-dim);
-  font-size: 14px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
 }
 
 .contact-details dd { font-size: 17px; font-weight: 600; }
+
+/* Phone numbers are data, so they get the code typeface */
+.contact-details a[href^="tel:"] { font-family: var(--mono); font-size: 16px; }
 
 .contact-details a { color: var(--yellow); }
 
@@ -870,6 +928,149 @@ p { color: var(--text-dim); }
   color: var(--yellow);
 }
 
+
+
+/* =========== TECHY LAYER ============================
+   Custom cursor, status strip, section indices, ticker.
+   ==================================================== */
+
+/* --- Custom cursor ---
+   Two small shapes that follow the pointer. The native cursor is
+   only hidden once script.js confirms it has switched these on,
+   so a failed script can never leave someone without a pointer. */
+.cursor-ring,
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  pointer-events: none;      /* never blocks a click */
+  opacity: 0;
+  transition: opacity 0.25s;
+  will-change: transform;
+}
+
+.cursor-ring {
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  border-radius: 50%;
+  transition: opacity 0.25s, width 0.2s, height 0.2s,
+              margin 0.2s, border-color 0.2s;
+}
+
+.cursor-dot {
+  width: 7px;
+  height: 7px;
+  margin: -3.5px 0 0 -3.5px;
+  background-color: var(--yellow);
+  border-radius: 50%;
+}
+
+/* Switched on by script.js */
+.has-cursor .cursor-ring,
+.has-cursor .cursor-dot { opacity: 1; }
+
+.has-cursor,
+.has-cursor a,
+.has-cursor button,
+.has-cursor summary { cursor: none; }
+
+/* The ring opens up over anything clickable */
+.cursor-ring.is-over {
+  width: 54px;
+  height: 54px;
+  margin: -27px 0 0 -27px;
+  border-color: var(--yellow);
+}
+
+/* --- Status strip --- */
+.hud {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--text-dim);
+  margin-bottom: 20px;
+}
+
+.hud-cell { display: inline-flex; align-items: center; gap: 7px; }
+
+.hud-sep {
+  width: 14px;
+  height: 1px;
+  background-color: var(--navy-line);
+}
+
+/* The small light that says the system is up */
+.hud-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: #38D98A;
+  box-shadow: 0 0 0 0 rgba(56, 217, 138, 0.6);
+  animation: hud-blink 2.4s ease-out infinite;
+}
+
+@keyframes hud-blink {
+  0%   { box-shadow: 0 0 0 0 rgba(56, 217, 138, 0.55); }
+  70%  { box-shadow: 0 0 0 7px rgba(56, 217, 138, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(56, 217, 138, 0); }
+}
+
+/* --- Section index --- */
+.sec-index {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--blue);
+  margin-bottom: 10px;
+}
+
+/* --- Ticker --- */
+.ticker {
+  overflow: hidden;
+  border-top: 1px solid var(--navy-line);
+  border-bottom: 1px solid var(--navy-line);
+  background-color: rgba(11, 31, 58, 0.6);
+  padding: 13px 0;
+}
+
+.ticker-track {
+  display: flex;
+  width: max-content;
+  animation: ticker-run 38s linear infinite;
+}
+
+.ticker-run {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  padding-right: 26px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.ticker-run i { color: var(--yellow); font-style: normal; }
+
+/* Each copy is half the track, so moving by half loops seamlessly */
+@keyframes ticker-run {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Stop it moving for anyone who asked for less motion */
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track { animation: none; }
+  .hud-dot { animation: none; }
+}
 
 /* =========== 13. MOBILE ADJUSTMENTS =================
    These rules apply only on screens narrower than 860px.
@@ -1026,6 +1227,10 @@ p { color: var(--text-dim); }
 @media (max-width: 700px) {
 
   .section { padding: 56px 0; }
+
+  .hud { font-size: 10px; gap: 8px; }
+  .hud-sep { display: none; }
+  .ticker-run { font-size: 11px; gap: 18px; padding-right: 18px; }
 
   .hero { padding: 48px 0 52px; }
 

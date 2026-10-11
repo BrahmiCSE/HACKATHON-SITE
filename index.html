@@ -18,6 +18,16 @@
 <body>
 
 <!-- ============================================================
+     CUSTOM CURSOR
+     A dot that tracks the pointer exactly and a ring that trails
+     behind it. script.js only switches these on when there is a
+     real mouse, so phones and tablets are unaffected. If the
+     script fails, the normal cursor is never hidden.
+     ============================================================ -->
+<div class="cursor-ring" id="cursor-ring" aria-hidden="true"></div>
+<div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
+
+<!-- ============================================================
      ICON SET
 
      Every icon on the page is drawn here once, then reused with
@@ -200,6 +210,15 @@
 
     <div class="container">
 
+      <!-- Status strip. The live state is written by script.js. -->
+      <div class="hud">
+        <span class="hud-cell"><span class="hud-dot" aria-hidden="true"></span><span id="hud-state">SYS &middot; LOADING</span></span>
+        <span class="hud-sep" aria-hidden="true"></span>
+        <span class="hud-cell">BUILD WINDOW 09:00 &rarr; 18:00 IST</span>
+        <span class="hud-sep" aria-hidden="true"></span>
+        <span class="hud-cell">09H &middot; ONE SITTING</span>
+      </div>
+
       <p class="eyebrow">Echelon Institute of Technology, Faridabad</p>
 
       <p class="badge">Free to enter</p>
@@ -275,6 +294,7 @@
     <div class="container about-grid">
 
       <div>
+        <p class="sec-index">01 / ABOUT</p>
         <h2 data-reveal>Ideas are easy. Building one is the hard part.</h2>
         <p>
           The Echelon Young Innovators Hackathon 2026 is an inter-school hackathon for students of
@@ -327,6 +347,7 @@
        ============================================================ -->
   <section class="section section-alt" id="tracks">
     <div class="container">
+      <p class="sec-index">02 / TRACKS</p>
       <h2>Five tracks. Pick the one your idea fits.</h2>
       <p class="section-intro">
         Choose a track when you register. If your idea does not sit neatly in one of the first
@@ -379,6 +400,7 @@
        ============================================================ -->
   <section class="section section-alt" id="timeline">
     <div class="container">
+      <p class="sec-index">03 / TIMELINE</p>
       <h2>How the hackathon runs</h2>
       <p class="section-intro">Four stages between now and the finale.</p>
 
@@ -427,6 +449,7 @@
        ============================================================ -->
   <section class="section" id="eligibility">
     <div class="container">
+      <p class="sec-index">04 / ELIGIBILITY</p>
       <h2>Who can take part</h2>
       <p class="section-intro">Tap any card to read the detail.</p>
 
@@ -518,6 +541,7 @@
        ============================================================ -->
   <section class="section section-alt" id="prizes">
     <div class="container">
+      <p class="sec-index">05 / PRIZES</p>
       <h2>A prize pool of &#8377;37,100</h2>
       <p class="section-intro">
         Awarded to the top three teams at the grand finale.
@@ -548,6 +572,34 @@
   </section>
 
   <!-- ============================================================
+       TICKER
+       The strip is written twice so it can loop without a visible
+       jump. The second copy is hidden from screen readers.
+       ============================================================ -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span class="ticker-run">
+        <span>&#8377;37,100 PRIZE POOL</span><i>&#9671;</i>
+        <span>9 HOURS NON-STOP</span><i>&#9671;</i>
+        <span>CLASSES 9 TO 12</span><i>&#9671;</i>
+        <span>TEAMS OF 2 TO 4</span><i>&#9671;</i>
+        <span>FREE ENTRY</span><i>&#9671;</i>
+        <span>5 TRACKS</span><i>&#9671;</i>
+        <span>21 NOV 2026</span><i>&#9671;</i>
+      </span>
+      <span class="ticker-run">
+        <span>&#8377;37,100 PRIZE POOL</span><i>&#9671;</i>
+        <span>9 HOURS NON-STOP</span><i>&#9671;</i>
+        <span>CLASSES 9 TO 12</span><i>&#9671;</i>
+        <span>TEAMS OF 2 TO 4</span><i>&#9671;</i>
+        <span>FREE ENTRY</span><i>&#9671;</i>
+        <span>5 TRACKS</span><i>&#9671;</i>
+        <span>21 NOV 2026</span><i>&#9671;</i>
+      </span>
+    </div>
+  </div>
+
+  <!-- ============================================================
        REGISTRATION CALL TO ACTION
        ============================================================ -->
   <section class="section register" id="register">
@@ -567,7 +619,8 @@
        ============================================================ -->
   <section class="section" id="faqs">
     <div class="container faq-grid">
-      <h2>Questions</h2>
+      <p class="sec-index">06 / FAQ</p>
+        <h2>Questions</h2>
 
       <div class="faq-list" data-reveal>
         <details>
@@ -635,6 +688,7 @@
     <div class="container contact-grid">
 
       <div>
+        <p class="sec-index">07 / CONTACT</p>
         <h2>Contact</h2>
         <p>
           Organised by the Department of Computer Science and Engineering,
