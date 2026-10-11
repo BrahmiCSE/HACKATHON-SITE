@@ -28,11 +28,20 @@
      ============================================================ -->
 <div class="boot" id="boot" role="dialog" aria-modal="true" aria-label="Loading the hackathon site" hidden>
   <div class="boot-inner">
-    <pre class="boot-log" id="boot-log" aria-hidden="true"></pre>
 
-    <div class="boot-bar" aria-hidden="true"><span class="boot-bar-fill" id="boot-fill"></span></div>
+    <!-- The poster appears once the sequence finishes, as the thing
+         that was being loaded. Decorative here: everything it says
+         also appears as real text on the page itself. -->
+    <div class="boot-poster" id="boot-poster" aria-hidden="true">
+      <img src="images/poster.jpg" width="800" height="1000" alt="">
+    </div>
 
-    <div class="boot-reveal" id="boot-reveal">
+    <div class="boot-col">
+      <pre class="boot-log" id="boot-log" aria-hidden="true"></pre>
+
+      <div class="boot-bar" aria-hidden="true"><span class="boot-bar-fill" id="boot-fill"></span></div>
+
+      <div class="boot-reveal" id="boot-reveal">
       <p class="boot-eyebrow">ECHELON INSTITUTE OF TECHNOLOGY</p>
       <p class="boot-title">Young Innovators<br>Hackathon 2026</p>
       <div class="boot-actions">
@@ -41,7 +50,9 @@
            href="https://unstop.com/p/echelon-young-innovators-hackathon-2026-echelon-institute-of-technology-1768767"
            target="_blank" rel="noopener noreferrer">Register now</a>
       </div>
-      <p class="boot-hint">Press any key to skip</p>
+      </div>
+
+      <p class="boot-hint">Press any key, or click anywhere, to skip</p>
     </div>
   </div>
 </div>

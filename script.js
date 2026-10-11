@@ -603,27 +603,41 @@ function initBoot() {
   var enter  = document.getElementById("boot-enter");
 
   var STORAGE_KEY = "eyi-boot-seen";
-  var SHOW_AGAIN_AFTER = 24 * 60 * 60 * 1000;   // one day
+  // How long before a returning visitor sees it again.
+  // 60 * 60 * 1000 is one hour. For a day, use 24 * 60 * 60 * 1000.
+  var SHOW_AGAIN_AFTER = 60 * 60 * 1000;
 
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduced) { return; }
 
-  // Has this browser seen it recently? Storage can throw in private
-  // windows, so a failure here simply means we show it.
-  try {
-    var last = window.localStorage.getItem(STORAGE_KEY);
-    if (last && (Date.now() - Number(last)) < SHOW_AGAIN_AFTER) { return; }
-  } catch (e) { /* no storage available, carry on and show it */ }
+  // Adding ?boot=1 to the address forces it to run, however recently
+  // it was last seen. Useful for showing it to someone on demand.
+  var forced = window.location.search.indexOf("boot=1") !== -1 ||
+               window.location.hash === "#boot";
+
+  // Otherwise: has this browser seen it in the last day? Storage can
+  // throw in private windows, so a failure here simply means we show it.
+  if (!forced) {
+    try {
+      var last = window.localStorage.getItem(STORAGE_KEY);
+      if (last && (Date.now() - Number(last)) < SHOW_AGAIN_AFTER) { return; }
+    } catch (e) { /* no storage available, carry on and show it */ }
+  }
 
   var LINES = [
     "&gt; echelon --init",
     "  loading event manifest .......... <u>ok</u>",
     "  tracks <b>5</b>   stages <b>4</b>   build window <b>9h</b>",
     "  prize pool <b>&#8377;37,100</b>   entry <b>free</b>",
+    "  fetching poster ................. <u>ok</u>",
     "&gt; status: <b>REGISTRATION OPENS 12 OCT</b>"
   ];
 
-  var LINE_GAP = 150;      // milliseconds between lines
+  // Paced so the whole sequence runs about five and a half seconds
+  // before the poster lands, which is what the organisers asked for.
+  // Anyone impatient can skip at any point; the hint says so from
+  // the first frame.
+  var LINE_GAP = 700;      // milliseconds between lines
   var timers = [];
   var finished = false;
 
@@ -648,10 +662,12 @@ function initBoot() {
     if (finished) { return; }
     boot.classList.add("is-ready");
     if (enter) { enter.focus(); }
-  }, LINES.length * LINE_GAP + 200));
+  }, LINES.length * LINE_GAP + 1200));
 
   // And clear itself shortly after, in case nobody touches anything
-  timers.push(window.setTimeout(close, LINES.length * LINE_GAP + 1700));
+  // Once the poster is up, leave it there long enough to actually be
+  // read, then clear itself so nobody is left stuck on it.
+  timers.push(window.setTimeout(close, LINES.length * LINE_GAP + 8500));
 
   function close() {
     if (finished) { return; }
