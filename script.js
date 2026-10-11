@@ -582,7 +582,121 @@ function initTrackSpotlight() {
 
 
 /* -----------------------------------------------------------
-   10. FOOTER YEAR
+   10. BOOT SEQUENCE
+
+   A short start-up screen. Rules it keeps to, so it stays a
+   pleasure rather than an obstacle:
+
+     - shown at most once a day per browser
+     - gone in under three seconds on its own
+     - any key, any click or Escape skips it immediately
+     - never shown if the visitor asked for reduced motion
+     - hidden in the stylesheet by default, so a broken script
+       cannot leave the site covered by a dead overlay
+   ----------------------------------------------------------- */
+function initBoot() {
+  var boot = document.getElementById("boot");
+  if (!boot) { return; }
+
+  var log    = document.getElementById("boot-log");
+  var fill   = document.getElementById("boot-fill");
+  var enter  = document.getElementById("boot-enter");
+
+  var STORAGE_KEY = "eyi-boot-seen";
+  var SHOW_AGAIN_AFTER = 24 * 60 * 60 * 1000;   // one day
+
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduced) { return; }
+
+  // Has this browser seen it recently? Storage can throw in private
+  // windows, so a failure here simply means we show it.
+  try {
+    var last = window.localStorage.getItem(STORAGE_KEY);
+    if (last && (Date.now() - Number(last)) < SHOW_AGAIN_AFTER) { return; }
+  } catch (e) { /* no storage available, carry on and show it */ }
+
+  var LINES = [
+    "&gt; echelon --init",
+    "  loading event manifest .......... <u>ok</u>",
+    "  tracks <b>5</b>   stages <b>4</b>   build window <b>9h</b>",
+    "  prize pool <b>&#8377;37,100</b>   entry <b>free</b>",
+    "&gt; status: <b>REGISTRATION OPENS 12 OCT</b>"
+  ];
+
+  var LINE_GAP = 150;      // milliseconds between lines
+  var timers = [];
+  var finished = false;
+
+  boot.removeAttribute("hidden");
+  document.documentElement.classList.add("boot-open");
+
+  // Print the lines one after another
+  LINES.forEach(function (line, i) {
+    timers.push(window.setTimeout(function () {
+      if (finished) { return; }
+      log.innerHTML += line + "\n";
+    }, i * LINE_GAP));
+  });
+
+  // Start the bar on the next frame so the width change animates
+  window.requestAnimationFrame(function () {
+    if (fill) { fill.style.width = "100%"; }
+  });
+
+  // Show the title and buttons once the lines have printed
+  timers.push(window.setTimeout(function () {
+    if (finished) { return; }
+    boot.classList.add("is-ready");
+    if (enter) { enter.focus(); }
+  }, LINES.length * LINE_GAP + 200));
+
+  // And clear itself shortly after, in case nobody touches anything
+  timers.push(window.setTimeout(close, LINES.length * LINE_GAP + 1700));
+
+  function close() {
+    if (finished) { return; }
+    finished = true;
+
+    for (var i = 0; i < timers.length; i++) { window.clearTimeout(timers[i]); }
+
+    boot.classList.add("is-done");
+    document.documentElement.classList.remove("boot-open");
+
+    try { window.localStorage.setItem(STORAGE_KEY, String(Date.now())); } catch (e) {}
+
+    // Take it out of the page once the fade has finished, so it can
+    // never sit invisibly on top and swallow clicks.
+    window.setTimeout(function () {
+      boot.setAttribute("hidden", "");
+      document.removeEventListener("keydown", onKey);
+    }, 600);
+  }
+
+  function onKey(event) {
+    // Let people tab to the buttons rather than skipping by accident
+    if (event.key === "Tab") { return; }
+    close();
+  }
+
+  document.addEventListener("keydown", onKey);
+
+  boot.addEventListener("click", function (event) {
+    // The register link should open rather than just dismissing
+    if (event.target.closest("a")) { return; }
+    close();
+  });
+
+  if (enter) {
+    enter.addEventListener("click", function (event) {
+      event.stopPropagation();
+      close();
+    });
+  }
+}
+
+
+/* -----------------------------------------------------------
+   11. FOOTER YEAR
    ----------------------------------------------------------- */
 function initYear() {
   var yearEl = document.getElementById("year");
@@ -597,6 +711,7 @@ function initYear() {
    The script tag sits at the end of the body, so the HTML is
    already loaded by the time this runs.
    ----------------------------------------------------------- */
+initBoot();
 initCountdown();
 initMenu();
 initBadgeTilt();

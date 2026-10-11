@@ -18,6 +18,35 @@
 <body>
 
 <!-- ============================================================
+     BOOT SEQUENCE
+
+     A short start-up screen shown once a day per visitor. It is
+     hidden in the stylesheet by default and only shown by
+     script.js, so if the script fails it can never block the site.
+     Any key, any click, or Escape skips it, and it clears itself
+     after a few seconds on its own.
+     ============================================================ -->
+<div class="boot" id="boot" role="dialog" aria-modal="true" aria-label="Loading the hackathon site" hidden>
+  <div class="boot-inner">
+    <pre class="boot-log" id="boot-log" aria-hidden="true"></pre>
+
+    <div class="boot-bar" aria-hidden="true"><span class="boot-bar-fill" id="boot-fill"></span></div>
+
+    <div class="boot-reveal" id="boot-reveal">
+      <p class="boot-eyebrow">ECHELON INSTITUTE OF TECHNOLOGY</p>
+      <p class="boot-title">Young Innovators<br>Hackathon 2026</p>
+      <div class="boot-actions">
+        <button class="btn" type="button" id="boot-enter">Enter site</button>
+        <a class="btn btn-outline"
+           href="https://unstop.com/p/echelon-young-innovators-hackathon-2026-echelon-institute-of-technology-1768767"
+           target="_blank" rel="noopener noreferrer">Register now</a>
+      </div>
+      <p class="boot-hint">Press any key to skip</p>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
      CUSTOM CURSOR
      A dot that tracks the pointer exactly and a ring that trails
      behind it. script.js only switches these on when there is a
