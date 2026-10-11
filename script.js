@@ -582,41 +582,40 @@ function initTrackSpotlight() {
 
 
 /* -----------------------------------------------------------
-   10. BOOT SEQUENCE
+   10. POSTER POPUP
 
-   A short start-up screen. Rules it keeps to, so it stays a
-   pleasure rather than an obstacle:
+   Appears two seconds after the page loads, so the visitor sees
+   the site first. Rules it keeps to:
 
-     - shown at most once a day per browser
-     - gone in under three seconds on its own
-     - any key, any click or Escape skips it immediately
-     - never shown if the visitor asked for reduced motion
+     - shown at most once an hour per browser
+     - closes on the X, on "Maybe later", on Escape, or on a click
+       outside the card
+     - the page behind cannot scroll while it is open
      - hidden in the stylesheet by default, so a broken script
        cannot leave the site covered by a dead overlay
+     - keyboard focus moves into it and returns afterwards
+
+   Add ?popup=1 to the address to force it to show.
    ----------------------------------------------------------- */
-function initBoot() {
-  var boot = document.getElementById("boot");
-  if (!boot) { return; }
+function initPromo() {
+  var promo = document.getElementById("promo");
+  if (!promo) { return; }
 
-  var log    = document.getElementById("boot-log");
-  var fill   = document.getElementById("boot-fill");
-  var enter  = document.getElementById("boot-enter");
+  var card    = promo.querySelector(".promo-card");
+  var closeEl = document.getElementById("promo-close");
+  var later   = document.getElementById("promo-dismiss");
 
-  var STORAGE_KEY = "eyi-boot-seen";
+  var STORAGE_KEY = "eyi-promo-seen";
+
   // How long before a returning visitor sees it again.
   // 60 * 60 * 1000 is one hour. For a day, use 24 * 60 * 60 * 1000.
   var SHOW_AGAIN_AFTER = 60 * 60 * 1000;
 
-  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduced) { return; }
+  var DELAY = 2000;          // how long after load it appears
 
-  // Adding ?boot=1 to the address forces it to run, however recently
-  // it was last seen. Useful for showing it to someone on demand.
-  var forced = window.location.search.indexOf("boot=1") !== -1 ||
-               window.location.hash === "#boot";
+  var forced = window.location.search.indexOf("popup=1") !== -1 ||
+               window.location.hash === "#popup";
 
-  // Otherwise: has this browser seen it in the last day? Storage can
-  // throw in private windows, so a failure here simply means we show it.
   if (!forced) {
     try {
       var last = window.localStorage.getItem(STORAGE_KEY);
@@ -624,90 +623,51 @@ function initBoot() {
     } catch (e) { /* no storage available, carry on and show it */ }
   }
 
-  var LINES = [
-    "&gt; echelon --init",
-    "  loading event manifest .......... <u>ok</u>",
-    "  tracks <b>5</b>   stages <b>4</b>   build window <b>9h</b>",
-    "  prize pool <b>&#8377;37,100</b>   entry <b>free</b>",
-    "  fetching poster ................. <u>ok</u>",
-    "&gt; status: <b>REGISTRATION OPENS 12 OCT</b>"
-  ];
+  var opener = null;
+  var open = false;
 
-  // Paced so the whole sequence runs about five and a half seconds
-  // before the poster lands, which is what the organisers asked for.
-  // Anyone impatient can skip at any point; the hint says so from
-  // the first frame.
-  var LINE_GAP = 700;      // milliseconds between lines
-  var timers = [];
-  var finished = false;
+  window.setTimeout(function () {
+    opener = document.activeElement;
 
-  boot.removeAttribute("hidden");
-  document.documentElement.classList.add("boot-open");
+    promo.removeAttribute("hidden");
+    document.documentElement.classList.add("promo-open");
 
-  // Print the lines one after another
-  LINES.forEach(function (line, i) {
-    timers.push(window.setTimeout(function () {
-      if (finished) { return; }
-      log.innerHTML += line + "\n";
-    }, i * LINE_GAP));
-  });
-
-  // Start the bar on the next frame so the width change animates
-  window.requestAnimationFrame(function () {
-    if (fill) { fill.style.width = "100%"; }
-  });
-
-  // Show the title and buttons once the lines have printed
-  timers.push(window.setTimeout(function () {
-    if (finished) { return; }
-    boot.classList.add("is-ready");
-    if (enter) { enter.focus(); }
-  }, LINES.length * LINE_GAP + 1200));
-
-  // And clear itself shortly after, in case nobody touches anything
-  // Once the poster is up, leave it there long enough to actually be
-  // read, then clear itself so nobody is left stuck on it.
-  timers.push(window.setTimeout(close, LINES.length * LINE_GAP + 8500));
-
-  function close() {
-    if (finished) { return; }
-    finished = true;
-
-    for (var i = 0; i < timers.length; i++) { window.clearTimeout(timers[i]); }
-
-    boot.classList.add("is-done");
-    document.documentElement.classList.remove("boot-open");
+    // Next frame, so the fade and slide actually run
+    window.requestAnimationFrame(function () {
+      promo.classList.add("is-open");
+      open = true;
+      if (closeEl) { closeEl.focus(); }
+    });
 
     try { window.localStorage.setItem(STORAGE_KEY, String(Date.now())); } catch (e) {}
+  }, DELAY);
 
-    // Take it out of the page once the fade has finished, so it can
-    // never sit invisibly on top and swallow clicks.
+  function close() {
+    if (!open) { return; }
+    open = false;
+
+    promo.classList.remove("is-open");
+    document.documentElement.classList.remove("promo-open");
+
+    // Take it out of the page once it has faded, so it can never sit
+    // invisibly on top and swallow clicks.
     window.setTimeout(function () {
-      boot.setAttribute("hidden", "");
-      document.removeEventListener("keydown", onKey);
-    }, 600);
+      promo.setAttribute("hidden", "");
+      if (opener && typeof opener.focus === "function") { opener.focus(); }
+    }, 400);
   }
 
-  function onKey(event) {
-    // Let people tab to the buttons rather than skipping by accident
-    if (event.key === "Tab") { return; }
-    close();
-  }
+  if (closeEl) { closeEl.addEventListener("click", close); }
+  if (later)   { later.addEventListener("click", close); }
 
-  document.addEventListener("keydown", onKey);
-
-  boot.addEventListener("click", function (event) {
-    // The register link should open rather than just dismissing
-    if (event.target.closest("a")) { return; }
-    close();
+  // A click on the dark area outside the card closes it
+  promo.addEventListener("click", function (event) {
+    if (card && !card.contains(event.target)) { close(); }
   });
 
-  if (enter) {
-    enter.addEventListener("click", function (event) {
-      event.stopPropagation();
-      close();
-    });
-  }
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") { close(); }
+  });
 }
 
 
@@ -727,7 +687,7 @@ function initYear() {
    The script tag sits at the end of the body, so the HTML is
    already loaded by the time this runs.
    ----------------------------------------------------------- */
-initBoot();
+initPromo();
 initCountdown();
 initMenu();
 initBadgeTilt();

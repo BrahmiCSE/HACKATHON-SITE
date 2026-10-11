@@ -76,9 +76,9 @@ body::before {
 
 body > * { position: relative; z-index: 1; }
 
-/* While the boot screen is up, the page behind must not scroll */
-html.boot-open,
-html.boot-open body { overflow: hidden; }
+/* While the popup is up, the page behind must not scroll */
+html.promo-open,
+html.promo-open body { overflow: hidden; }
 
 body {
   background-color: var(--navy);
@@ -1256,12 +1256,12 @@ p { color: var(--text-dim); }
 }
 
 
-/* --- Boot sequence ---
+/* --- Poster popup ---
    Hidden unless script.js removes the hidden attribute, so a failed
    script leaves the site perfectly usable rather than covered. */
-.boot[hidden] { display: none; }
+.promo[hidden] { display: none; }
 
-.boot {
+.promo {
   position: fixed;
   inset: 0;
   z-index: 200;
@@ -1269,144 +1269,95 @@ p { color: var(--text-dim); }
   align-items: center;
   justify-content: center;
   padding: 24px;
-  background:
-    radial-gradient(60rem 40rem at 50% 30%, rgba(37, 99, 235, 0.22), transparent 70%),
-    #07152A;
-  transition: opacity 0.5s ease-out, visibility 0.5s;
-}
-
-/* Added by script.js to fade the whole thing away */
-.boot.is-done {
+  background: rgba(5, 14, 28, 0.82);
+  backdrop-filter: blur(6px);
   opacity: 0;
-  visibility: hidden;
+  transition: opacity 0.35s ease-out;
 }
 
-.boot-inner {
-  display: flex;
-  align-items: center;
-  gap: 42px;
+.promo.is-open { opacity: 1; }
+
+.promo-card {
+  position: relative;
   width: 100%;
-  max-width: 900px;
-  font-family: var(--mono);
+  max-width: 380px;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
+  padding: 16px 16px 20px;
+  border-radius: 16px;
+  border: 1px solid var(--navy-line);
+  background-color: var(--navy);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.6);
+  transform: translateY(18px) scale(0.97);
+  transition: transform 0.4s cubic-bezier(0.2, 0.75, 0.25, 1);
+  text-align: center;
 }
 
-.boot-col { flex: 1 1 420px; min-width: 0; }
+.promo.is-open .promo-card { transform: none; }
 
-/* The poster. It arrives after the log has printed, as though it
-   were the thing being loaded. */
-.boot-poster {
-  flex: 0 0 236px;
-  opacity: 0;
-  transform: translateY(18px) scale(0.96);
-  transition: opacity 0.6s ease-out,
-              transform 0.6s cubic-bezier(0.2, 0.75, 0.25, 1);
-}
-
-.boot.is-ready .boot-poster {
-  opacity: 1;
-  transform: none;
-}
-
-.boot-poster img {
+.promo-img {
   display: block;
   width: 100%;
   height: auto;
   border-radius: 10px;
-  border: 1px solid rgba(127, 166, 240, 0.28);
-  box-shadow: 0 26px 54px rgba(0, 0, 0, 0.55);
 }
 
-.boot-log {
-  margin: 0 0 18px;
-  min-height: 132px;          /* reserved, so nothing jumps as lines appear */
-  font-size: 13px;
-  line-height: 1.75;
-  color: #7FA6F0;
-  white-space: pre-wrap;
+.promo-title {
+  font-size: 19px;
+  margin: 16px 0 14px;
 }
 
-.boot-log b { color: var(--yellow); font-weight: 600; }
-.boot-log u { color: #38D98A; text-decoration: none; }
-
-/* The loading bar */
-.boot-bar {
-  height: 3px;
-  border-radius: 3px;
-  background-color: rgba(127, 166, 240, 0.18);
-  overflow: hidden;
-}
-
-.boot-bar-fill {
-  display: block;
-  width: 0;
-  height: 100%;
-  border-radius: 3px;
-  background: linear-gradient(90deg, var(--blue), var(--yellow));
-  transition: width 5.2s cubic-bezier(0.25, 0.6, 0.35, 1);
-}
-
-/* The identity and buttons, revealed once loading finishes */
-.boot-reveal {
-  margin-top: 26px;
-  opacity: 0;
-  transform: translateY(14px);
-  transition: opacity 0.5s ease-out, transform 0.5s cubic-bezier(0.2, 0.75, 0.25, 1);
-}
-
-.boot.is-ready .boot-reveal {
-  opacity: 1;
-  transform: none;
-}
-
-.boot-eyebrow {
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  color: var(--yellow);
-  margin-bottom: 10px;
-}
-
-.boot-title {
-  font-family: inherit;
-  font-size: clamp(22px, 4.4vw, 32px);
-  font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: -0.01em;
-  color: #fff;
-  margin-bottom: 22px;
-}
-
-.boot-actions {
+.promo-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  justify-content: center;
+  gap: 10px;
 }
 
-.boot-hint {
-  margin-top: 22px;
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  color: #5A7BAA;
+.promo-actions .btn { padding: 11px 20px; font-size: 15px; }
+
+/* Close button, sitting over the top corner of the poster */
+.promo-close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background-color: rgba(5, 14, 28, 0.72);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
-/* Nothing animates for anyone who asked for less motion. script.js
-   also shortens the whole sequence for them. */
-@media (max-width: 760px) {
-  .boot-inner {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 22px;
-  }
+.promo-close:hover { background-color: var(--flame, #D23F3F); }
 
-  .boot-poster { flex: 0 0 auto; width: 128px; }
-
-  .boot-log { min-height: 108px; font-size: 11.5px; }
+.promo-close svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
 }
 
+@media (max-width: 700px) {
+  .promo { padding: 16px; }
+  .promo-card { max-width: 320px; }
+  .promo-close { top: 20px; right: 20px; }
+}
+
+/* No sliding or fading for anyone who asked for less motion.
+   The popup still appears; it is content, not decoration. */
 @media (prefers-reduced-motion: reduce) {
-  .boot,
-  .boot-bar-fill,
-  .boot-poster,
-  .boot-reveal { transition: none; }
+  .promo,
+  .promo-card { transition: none; }
 }
 
 /* =========== 13. MOBILE ADJUSTMENTS =================

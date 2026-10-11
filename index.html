@@ -18,41 +18,31 @@
 <body>
 
 <!-- ============================================================
-     BOOT SEQUENCE
+     POSTER POPUP
 
-     A short start-up screen shown once a day per visitor. It is
-     hidden in the stylesheet by default and only shown by
-     script.js, so if the script fails it can never block the site.
-     Any key, any click, or Escape skips it, and it clears itself
-     after a few seconds on its own.
+     Appears two seconds after the page has loaded, so visitors see
+     the site first. Hidden in the stylesheet by default and only
+     shown by script.js, so a failed script can never leave a dead
+     overlay covering the site.
      ============================================================ -->
-<div class="boot" id="boot" role="dialog" aria-modal="true" aria-label="Loading the hackathon site" hidden>
-  <div class="boot-inner">
+<div class="promo" id="promo" role="dialog" aria-modal="true" aria-labelledby="promo-title" hidden>
+  <div class="promo-card">
+    <button class="promo-close" id="promo-close" type="button" aria-label="Close">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
 
-    <!-- The poster appears once the sequence finishes, as the thing
-         that was being loaded. Decorative here: everything it says
-         also appears as real text on the page itself. -->
-    <div class="boot-poster" id="boot-poster" aria-hidden="true">
-      <img src="images/poster.jpg" width="800" height="1000" alt="">
-    </div>
+    <img class="promo-img" src="images/poster.jpg" width="800" height="1000"
+         alt="Echelon Young Innovators Hackathon 2026 poster. Registration 12 to 30 October 2026.
+              Online round 31 October to 5 November. Offline round 21 November at Echelon Institute
+              of Technology, Faridabad. Prizes of 21,000, 11,000 and 5,100 rupees.">
 
-    <div class="boot-col">
-      <pre class="boot-log" id="boot-log" aria-hidden="true"></pre>
+    <h2 class="promo-title" id="promo-title">Registration opens 12 October</h2>
 
-      <div class="boot-bar" aria-hidden="true"><span class="boot-bar-fill" id="boot-fill"></span></div>
-
-      <div class="boot-reveal" id="boot-reveal">
-      <p class="boot-eyebrow">ECHELON INSTITUTE OF TECHNOLOGY</p>
-      <p class="boot-title">Young Innovators<br>Hackathon 2026</p>
-      <div class="boot-actions">
-        <button class="btn" type="button" id="boot-enter">Enter site</button>
-        <a class="btn btn-outline"
-           href="https://unstop.com/p/echelon-young-innovators-hackathon-2026-echelon-institute-of-technology-1768767"
-           target="_blank" rel="noopener noreferrer">Register now</a>
-      </div>
-      </div>
-
-      <p class="boot-hint">Press any key, or click anywhere, to skip</p>
+    <div class="promo-actions">
+      <a class="btn"
+         href="https://unstop.com/p/echelon-young-innovators-hackathon-2026-echelon-institute-of-technology-1768767"
+         target="_blank" rel="noopener noreferrer">Register on Unstop</a>
+      <button class="btn btn-outline" type="button" id="promo-dismiss">Maybe later</button>
     </div>
   </div>
 </div>
