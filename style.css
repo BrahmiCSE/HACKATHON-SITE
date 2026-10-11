@@ -489,7 +489,12 @@ p { color: var(--text-dim); }
   opacity: 0.55;
 }
 
-.tk-item { position: relative; text-align: center; }
+.tk-item {
+  position: relative;
+  text-align: center;
+  transition: opacity 0.45s ease-out;
+}
+
 
 .tk-node {
   position: relative;
@@ -510,6 +515,42 @@ p { color: var(--text-dim); }
   border-color: var(--blue);
   transform: translateY(-3px);
 }
+
+/* The one currently lit */
+.tk-item.is-active .tk-node {
+  border-color: var(--yellow);
+  background-color: var(--navy-soft);
+  transform: scale(1.14);
+  box-shadow: 0 0 0 6px rgba(255, 200, 61, 0.12),
+              0 0 26px rgba(255, 200, 61, 0.32);
+}
+
+.tk-item.is-active .tk-node .icon { color: var(--yellow); }
+
+.tk-item.is-active h3 { color: #fff; }
+
+/* A light that slides along the rail to whichever one is lit.
+   --tk-active is the index, set by script.js. */
+/* script.js measures the lit circle and writes its centre into
+   --tk-x and --tk-y. Measuring beats percentage maths here, because
+   the circles sit in grid columns while the rail is inset, so the
+   two never lined up reliably. */
+.tk-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 84px;
+  height: 3px;
+  margin: -1.5px 0 0 -42px;
+  z-index: 0;
+  border-radius: 3px;
+  background: linear-gradient(90deg, transparent, var(--yellow), transparent);
+  opacity: 0;
+  transform: translate(var(--tk-x, 0px), var(--tk-y, 0px));
+  transition: transform 0.55s cubic-bezier(0.3, 0.8, 0.3, 1), opacity 0.4s;
+}
+
+.tracks.is-cycling .tk-glow { opacity: 0.95; }
 
 .tk-node .icon { margin: 0; width: 24px; height: 24px; }
 
@@ -1205,6 +1246,9 @@ p { color: var(--text-dim); }
 @media (prefers-reduced-motion: reduce) {
   .trace { animation: none; opacity: 0; }
   .caret { animation: none; }
+  /* No spotlight cycle, and nothing dimmed */
+  .tracks.is-cycling .tk-item { opacity: 1; }
+  .tk-glow { display: none; }
 }
 
 /* =========== 13. MOBILE ADJUSTMENTS =================
@@ -1257,6 +1301,15 @@ p { color: var(--text-dim); }
   }
 
   .tk-node { grid-row: 1 / span 2; margin: 0; }
+
+  /* Vertical rail, so the light travels down rather than across */
+  /* The rail runs downwards here, so the light is a vertical bar */
+  .tk-glow {
+    width: 3px;
+    height: 70px;
+    margin: -35px 0 0 -1.5px;
+    background: linear-gradient(180deg, transparent, var(--yellow), transparent);
+  }
 
   .tk-item h3 { min-height: 0; }
 
@@ -1430,14 +1483,14 @@ p { color: var(--text-dim); }
 
 /* A group, whose children arrive in order.
    The rails are skipped: they are lines, not items. */
-[data-stagger] > *:not(.tk-rail):not(.tl-rail) {
+[data-stagger] > *:not(.tk-rail):not(.tl-rail):not(.tk-glow) {
   opacity: 0;
   transform: translateY(30px);
   transition: opacity 0.6s ease-out,
               transform 0.6s cubic-bezier(0.2, 0.75, 0.25, 1);
 }
 
-[data-stagger].is-revealed > *:not(.tk-rail):not(.tl-rail) {
+[data-stagger].is-revealed > *:not(.tk-rail):not(.tl-rail):not(.tk-glow) {
   opacity: 1;
   transform: none;
 }
@@ -1493,6 +1546,12 @@ p { color: var(--text-dim); }
   [data-stagger] > * { opacity: 1; transform: none; }
 }
 
+
+/* While the spotlight runs, the others step back so the lit one
+   actually reads as lit. These sit here, after the reveal rules,
+   because those also set opacity on the same elements and whichever
+   comes last wins. */
+.tracks[data-stagger].is-cycling .tk-item:not(.is-active) { opacity: 0.4; }
 
 /* Respect people who have reduced motion turned on in their device settings */
 @media (prefers-reduced-motion: reduce) {

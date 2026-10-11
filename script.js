@@ -477,7 +477,112 @@ function initHud() {
 
 
 /* -----------------------------------------------------------
-   9. FOOTER YEAR
+   9. TRACK SPOTLIGHT
+
+   While the tracks section is on screen, each track lights up in
+   turn and a glow slides along the rail to it. The cycle stops
+   when the section scrolls away, so nothing runs in the
+   background, and hovering a track holds the light on that one.
+   ----------------------------------------------------------- */
+function initTrackSpotlight() {
+  var list = document.querySelector(".tracks");
+  if (!list) { return; }
+
+  var items = list.querySelectorAll(".tk-item");
+  if (items.length === 0) { return; }
+
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduced) { return; }
+
+  var HOLD = 1900;          // how long each one stays lit
+  var index = 0;
+  var timer = null;
+  var paused = false;
+
+  var glow = document.getElementById("tk-glow");
+
+  function light(i) {
+    for (var n = 0; n < items.length; n++) {
+      items[n].classList.toggle("is-active", n === i);
+    }
+    list.style.setProperty("--tk-active", String(i));
+
+    // Measure where the lit circle actually is and move the light
+    // there. Measuring is reliable on both layouts; working it out
+    // from percentages was not, because the circles sit in grid
+    // columns while the rail is inset from the edges.
+    if (glow) {
+      var node = items[i].querySelector(".tk-node");
+      if (node) {
+        var a = node.getBoundingClientRect();
+        var b = list.getBoundingClientRect();
+        glow.style.setProperty("--tk-x", (a.left - b.left + a.width / 2).toFixed(1) + "px");
+        glow.style.setProperty("--tk-y", (a.top - b.top + a.height / 2).toFixed(1) + "px");
+      }
+    }
+  }
+
+  // Re-measure if the window is resized while a track is lit
+  window.addEventListener("resize", function () {
+    if (timer !== null || paused) { light(index); }
+  });
+
+  function step() {
+    if (paused) { return; }
+    index = (index + 1) % items.length;
+    light(index);
+  }
+
+  function start() {
+    if (timer !== null) { return; }
+    list.classList.add("is-cycling");
+    light(index);
+    timer = window.setInterval(step, HOLD);
+  }
+
+  function stop() {
+    if (timer === null) { return; }
+    window.clearInterval(timer);
+    timer = null;
+    list.classList.remove("is-cycling");
+    for (var n = 0; n < items.length; n++) {
+      items[n].classList.remove("is-active");
+    }
+  }
+
+  // Hovering holds the light on whichever one you are pointing at
+  for (var i = 0; i < items.length; i++) {
+    (function (item, position) {
+      item.addEventListener("mouseenter", function () {
+        if (timer === null) { return; }
+        paused = true;
+        index = position;
+        light(position);
+      });
+      item.addEventListener("mouseleave", function () {
+        paused = false;
+      });
+    })(items[i], i);
+  }
+
+  // Only run while the section is actually on screen
+  if (typeof window.IntersectionObserver !== "function") {
+    start();
+    return;
+  }
+
+  var watcher = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) { start(); } else { stop(); }
+    });
+  }, { threshold: 0.25 });
+
+  watcher.observe(list);
+}
+
+
+/* -----------------------------------------------------------
+   10. FOOTER YEAR
    ----------------------------------------------------------- */
 function initYear() {
   var yearEl = document.getElementById("year");
@@ -499,5 +604,6 @@ initFlipCards();
 initTimeline();
 initHud();
 initReveal();
+initTrackSpotlight();
 initCursor();
 initYear();
