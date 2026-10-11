@@ -1224,6 +1224,7 @@ p { color: var(--text-dim); }
 
   .codewin-body { font-size: 11px; padding: 12px 10px 14px; }
 
+
   .codewin .ln { width: 18px; margin-right: 8px; }
 
   .rules {
@@ -1409,14 +1410,17 @@ p { color: var(--text-dim); }
 
 
 /* --- Reveal on scroll ---
-   Marked elements start slightly low and faded, then settle into
-   place the first time they scroll into view. script.js adds the
-   is-revealed class. If the script fails for any reason, the
-   fallback below still shows everything. */
+   Things start a little low and faded, then settle as they come
+   into view. Groups bring their children in one after another
+   rather than all at once. script.js adds the is-revealed class.
+   ------------------------------------------------------------- */
+
+/* A single item */
 [data-reveal] {
   opacity: 0;
-  transform: translateY(22px);
-  transition: opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.2, 0.7, 0.3, 1);
+  transform: translateY(30px);
+  transition: opacity 0.7s ease-out,
+              transform 0.7s cubic-bezier(0.2, 0.75, 0.25, 1);
 }
 
 [data-reveal].is-revealed {
@@ -1424,9 +1428,69 @@ p { color: var(--text-dim); }
   transform: none;
 }
 
+/* A group, whose children arrive in order.
+   The rails are skipped: they are lines, not items. */
+[data-stagger] > *:not(.tk-rail):not(.tl-rail) {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease-out,
+              transform 0.6s cubic-bezier(0.2, 0.75, 0.25, 1);
+}
+
+[data-stagger].is-revealed > *:not(.tk-rail):not(.tl-rail) {
+  opacity: 1;
+  transform: none;
+}
+
+/* 90ms between each one. Enough to read as a sequence,
+   short enough that the last card is not left waiting. */
+[data-stagger].is-revealed > *:nth-child(1) { transition-delay: 0ms; }
+[data-stagger].is-revealed > *:nth-child(2) { transition-delay: 90ms; }
+[data-stagger].is-revealed > *:nth-child(3) { transition-delay: 180ms; }
+[data-stagger].is-revealed > *:nth-child(4) { transition-delay: 270ms; }
+[data-stagger].is-revealed > *:nth-child(5) { transition-delay: 360ms; }
+[data-stagger].is-revealed > *:nth-child(6) { transition-delay: 450ms; }
+[data-stagger].is-revealed > *:nth-child(7) { transition-delay: 540ms; }
+[data-stagger].is-revealed > *:nth-child(8) { transition-delay: 630ms; }
+
+/* --- Entrances tuned to what the thing is --- */
+
+/* Track circles pop in, the way a node lights up on a board */
+.tracks[data-stagger] > .tk-item { transform: translateY(24px) scale(0.92); }
+.tracks[data-stagger].is-revealed > .tk-item { transform: none; }
+
+/* Podium blocks grow upward from the floor they stand on */
+.podium[data-stagger] > .pod {
+  transform: none;
+  opacity: 0;
+}
+
+.podium[data-stagger] > .pod .pod-block {
+  transform: scaleY(0.1);
+  transform-origin: bottom;
+  transition: transform 0.75s cubic-bezier(0.2, 0.75, 0.25, 1);
+}
+
+.podium[data-stagger].is-revealed > .pod { opacity: 1; }
+.podium[data-stagger].is-revealed > .pod .pod-block { transform: none; }
+
+/* The winner's block rises last and takes a touch longer */
+.podium[data-stagger].is-revealed > .pod-1 .pod-block { transition-delay: 260ms; }
+
+/* The code window comes in from the side it sits on */
+.codewin[data-reveal] { transform: translateY(24px) translateX(26px); }
+.codewin[data-reveal].is-revealed { transform: none; }
+
+/* On a narrow screen it rises straight up instead. The sideways
+   shift pushed it past the right edge and caused a horizontal scroll. */
+@media (max-width: 860px) {
+  .codewin[data-reveal] { transform: translateY(24px); }
+}
+
 /* Safety net: if JavaScript never runs, nothing stays invisible */
 @media (scripting: none) {
-  [data-reveal] { opacity: 1; transform: none; }
+  [data-reveal],
+  [data-stagger] > * { opacity: 1; transform: none; }
 }
 
 
@@ -1434,5 +1498,7 @@ p { color: var(--text-dim); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   * { transition: none !important; animation: none !important; }
-  [data-reveal] { opacity: 1; transform: none; }
+  [data-reveal],
+  [data-stagger] > *,
+  .podium[data-stagger] > .pod .pod-block { opacity: 1; transform: none; }
 }

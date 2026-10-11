@@ -318,7 +318,7 @@ function initTimeline() {
    ----------------------------------------------------------- */
 function initReveal() {
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var targets = document.querySelectorAll("[data-reveal]");
+  var targets = document.querySelectorAll("[data-reveal], [data-stagger]");
 
   if (targets.length === 0) { return; }
 
@@ -337,7 +337,13 @@ function initReveal() {
         watcher.unobserve(entry.target);   // only ever happens once
       }
     });
-  }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" });
+  }, {
+    // Fires once about a tenth of the thing is showing, and a little
+    // before it reaches the bottom edge, so it is already settling
+    // by the time it is properly in view.
+    threshold: 0.1,
+    rootMargin: "0px 0px -60px 0px"
+  });
 
   for (var j = 0; j < targets.length; j++) {
     watcher.observe(targets[j]);
