@@ -706,7 +706,7 @@ p { color: var(--text-dim); }
   align-items: end;
   gap: 18px;
   max-width: 760px;
-  margin-top: 46px;
+  margin: 46px auto 0;       /* auto left and right centres the podium */
   /* The floor the blocks stand on. Without it they look cut off
      where the section ends. */
   padding-bottom: 0;
