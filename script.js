@@ -141,7 +141,70 @@ function initMenu() {
 
 
 /* -----------------------------------------------------------
-   3. FOOTER YEAR
+   3. BADGE TILT
+
+   The badge turns slightly to follow the pointer, which makes it
+   read as an object sitting in space rather than a flat picture.
+
+   Only on pointers that can hover, so phones and tablets are left
+   alone, and skipped entirely if the visitor has asked their device
+   to reduce motion.
+   ----------------------------------------------------------- */
+function initBadgeTilt() {
+  var badge = document.getElementById("hero-badge");
+  var hero  = document.getElementById("home");
+
+  if (!badge || !hero) { return; }
+
+  var canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  var wideEnough = window.matchMedia("(min-width: 981px)").matches;
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (!canHover || !wideEnough || reduced) { return; }
+
+  var RESTING_Y = -14;   // the angles the CSS sets when the pointer is away
+  var RESTING_X = 6;
+  var SWING = 11;        // how far it is allowed to turn, in degrees
+  var pending = false;
+
+  function apply(event) {
+    var box = hero.getBoundingClientRect();
+
+    // Where the pointer is inside the hero, as -1 to 1 on each axis
+    var x = (event.clientX - box.left) / box.width * 2 - 1;
+    var y = (event.clientY - box.top) / box.height * 2 - 1;
+
+    // Clamp, so a pointer just outside cannot throw it to an extreme
+    x = Math.max(-1, Math.min(1, x));
+    y = Math.max(-1, Math.min(1, y));
+
+    var rotY = RESTING_Y + x * SWING;
+    var rotX = RESTING_X - y * SWING * 0.6;
+
+    badge.style.transform = "rotateY(" + rotY.toFixed(2) + "deg) " +
+                            "rotateX(" + rotX.toFixed(2) + "deg)";
+  }
+
+  hero.addEventListener("mousemove", function (event) {
+    // Only recalculate once per frame, so moving the mouse fast
+    // cannot flood the browser with work.
+    if (pending) { return; }
+    pending = true;
+    window.requestAnimationFrame(function () {
+      pending = false;
+      apply(event);
+    });
+  });
+
+  // Settle back to the resting angle when the pointer leaves
+  hero.addEventListener("mouseleave", function () {
+    badge.style.transform = "rotateY(" + RESTING_Y + "deg) rotateX(" + RESTING_X + "deg)";
+  });
+}
+
+
+/* -----------------------------------------------------------
+   4. FOOTER YEAR
    ----------------------------------------------------------- */
 function initYear() {
   var yearEl = document.getElementById("year");
@@ -150,6 +213,16 @@ function initYear() {
   }
 }
 
+
+/* -----------------------------------------------------------
+   START
+   The script tag sits at the end of the body, so the HTML is
+   already loaded by the time this runs.
+   ----------------------------------------------------------- */
+initCountdown();
+initMenu();
+initBadgeTilt();
+initYear();
 
 /* -----------------------------------------------------------
    START
