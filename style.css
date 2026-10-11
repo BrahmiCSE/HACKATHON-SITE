@@ -105,6 +105,38 @@ p { color: var(--text-dim); }
   margin-bottom: 14px;
 }
 
+/* --- Badge: the small yellow pill in the hero --- */
+.badge {
+  display: inline-block;
+  background-color: rgba(255, 200, 61, 0.14);
+  border: 1px solid rgba(255, 200, 61, 0.45);
+  color: var(--yellow);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 5px 14px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+}
+
+/* --- Icons ---
+   The sprite at the top of the HTML is never shown. Only the
+   copies made with <use> appear on the page. */
+.icon-sprite { display: none; }
+
+.icon {
+  width: 26px;
+  height: 26px;
+  flex-shrink: 0;
+  color: var(--blue);        /* stroke colour comes from here */
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.icon-lg { width: 34px; height: 34px; }
+
 /* --- Buttons --- */
 .btn {
   display: inline-block;
@@ -159,13 +191,10 @@ p { color: var(--text-dim); }
 .logo { display: flex; align-items: center; gap: 10px; }
 
 .logo-mark {
-  background-color: var(--blue);
-  color: #fff;
-  font-weight: 700;
-  font-size: 15px;
-  letter-spacing: 0.02em;
-  padding: 7px 10px;
-  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  display: block;
+  flex-shrink: 0;
 }
 
 .logo-text { font-weight: 600; font-size: 17px; }
@@ -215,6 +244,8 @@ p { color: var(--text-dim); }
 
 /* =========== 5. HERO AND COUNTDOWN ================== */
 .hero {
+  position: relative;
+  overflow: hidden;          /* keeps the artwork from causing sideways scroll */
   background:
     radial-gradient(45rem 28rem at 78% -5%, rgba(37, 99, 235, 0.38), transparent 62%),
     radial-gradient(32rem 22rem at 5% 100%, rgba(255, 200, 61, 0.12), transparent 60%),
@@ -222,6 +253,26 @@ p { color: var(--text-dim); }
   padding: 76px 0 72px;
   border-bottom: 1px solid var(--navy-line);
 }
+
+/* --- Hero badge --- */
+.hero-badge {
+  position: absolute;
+  top: 50%;
+  right: 2vw;
+  width: min(32vw, 400px);
+  height: auto;
+  transform: translateY(-50%);
+  pointer-events: none;      /* clicks pass straight through it */
+
+  /* The badge artwork is circular but the file is square. This fades the
+     corners out so it sits on the page instead of looking like a sticker.
+     If a browser does not support masks, it simply shows the square. */
+  -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 63%, transparent 74%);
+          mask-image: radial-gradient(circle at 50% 50%, #000 63%, transparent 74%);
+}
+
+/* Text must stay above the badge */
+.hero .container { position: relative; z-index: 1; }
 
 .hero-title {
   font-size: clamp(38px, 6.4vw, 76px);
@@ -270,7 +321,9 @@ p { color: var(--text-dim); }
 
 .facts {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  /* auto-fit means the columns adjust themselves to how many
+     facts there are and how wide the screen is */
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 22px;
   margin-top: 60px;
   padding-top: 26px;
@@ -299,6 +352,9 @@ p { color: var(--text-dim); }
 .highlights { display: grid; gap: 18px; }
 
 .highlights li {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
   background-color: var(--navy-soft);
   border: 1px solid var(--navy-line);
   border-left: 4px solid var(--blue);
@@ -307,6 +363,79 @@ p { color: var(--text-dim); }
 }
 
 .highlights p { font-size: 15px; }
+
+
+/* =========== 6a. TRACKS ============================= */
+.tracks {
+  display: grid;
+  /* auto-fit lets the five cards arrange themselves by screen width */
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+  margin-top: 10px;
+}
+
+.tracks li {
+  background-color: var(--navy);
+  border: 1px solid var(--navy-line);
+  border-radius: 12px;
+  padding: 24px 22px;
+}
+
+.tracks .icon { margin-bottom: 14px; }
+
+.tracks h3 { font-size: 18px; margin-bottom: 6px; }
+
+.tracks p { font-size: 15px; }
+
+/* The open track is the catch-all, so it runs the full width
+   underneath the other four instead of sitting alone in a column */
+.tracks li:last-child {
+  grid-column: 1 / -1;
+  border-color: rgba(255, 200, 61, 0.45);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.tracks li:last-child .icon { margin-bottom: 0; }
+
+.tracks li:last-child h3 { margin-bottom: 0; }
+
+.tracks li:last-child p { flex: 1 1 260px; }
+
+.tracks li:last-child .icon { color: var(--yellow); }
+
+
+/* =========== 6b. GALLERY ============================ */
+.gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 8px;
+}
+
+.gallery figure {
+  margin: 0;
+  background-color: var(--navy-soft);
+  border: 1px solid var(--navy-line);
+  border-radius: 14px;
+  overflow: hidden;          /* keeps the photo inside the rounded corners */
+}
+
+.gallery img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;         /* fills the frame without squashing the photo */
+  display: block;
+}
+
+.gallery figcaption {
+  color: var(--text-dim);
+  font-size: 15px;
+  padding: 12px 16px 14px;
+}
 
 
 /* =========== 7. TIMELINE ============================ */
@@ -357,6 +486,8 @@ p { color: var(--text-dim); }
   padding: 24px;
 }
 
+.rule .icon { margin-bottom: 12px; }
+
 .rule p { font-size: 15px; }
 
 /* Items still awaiting information get a dashed outline */
@@ -388,6 +519,14 @@ p { color: var(--text-dim); }
     var(--navy);
 }
 
+.prize-card .icon {
+  margin: 0 auto 12px;       /* centred inside the card */
+  display: block;
+}
+
+/* The winner's trophy is yellow, the other two stay blue */
+.prize-card-first .icon { color: var(--yellow); }
+
 .prize-rank {
   color: var(--text);
   font-weight: 600;
@@ -395,7 +534,18 @@ p { color: var(--text-dim); }
   margin-bottom: 4px;
 }
 
-.prize-value { font-size: 15px; }
+.prize-value {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+/* The winning amount is the one number people look for */
+.prize-card-first .prize-value {
+  font-size: 38px;
+  color: var(--yellow);
+}
 
 
 /* =========== 10. REGISTER =========================== */
@@ -410,6 +560,13 @@ p { color: var(--text-dim); }
 .register-inner p {
   max-width: 48ch;
   margin: 0 auto 28px;
+}
+
+.register-inner a,
+.faq-list a {
+  color: var(--yellow);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 
@@ -462,6 +619,11 @@ p { color: var(--text-dim); }
   align-items: start;
 }
 
+.affiliation {
+  margin-top: 14px;
+  font-size: 15px;
+}
+
 .contact-details { display: grid; gap: 16px; }
 
 .contact-details dt {
@@ -507,11 +669,23 @@ p { color: var(--text-dim); }
   }
 
   .rules,
-  .prize-row {
+  .prize-row,
+  .gallery {
     grid-template-columns: 1fr;
   }
 
   .facts { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 980px) {
+  /* On a narrow screen the badge moves above the title instead of
+     sitting beside it, so it never crowds the text. */
+  .hero-badge {
+    position: static;
+    transform: none;
+    width: 132px;
+    margin-bottom: 20px;
+  }
 }
 
 @media (max-width: 700px) {

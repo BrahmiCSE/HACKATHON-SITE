@@ -6,10 +6,129 @@
   <title>Echelon Young Innovators Hackathon 2026</title>
   <meta name="description" content="An inter-school hackathon for students of Classes 9 to 12, by the Department of Computer Science and Engineering, Echelon Institute of Technology, Faridabad. Grand finale 21 November 2026.">
   <meta name="theme-color" content="#0B1F3A">
+
+  <!-- Browser tab icon. The SVG is used where supported, the PNG
+       is the fallback and is also what iPhones use on the home screen. -->
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+
+<!-- ============================================================
+     ICON SET
+
+     Every icon on the page is drawn here once, then reused with
+     <svg class="icon"><use href="#icon-name"></use></svg>
+     This block is invisible. It is only a store of shapes.
+     ============================================================ -->
+<svg class="icon-sprite" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- Graduation cap -->
+    <symbol id="icon-cap" viewBox="0 0 24 24">
+      <path d="M2 8.5 12 4l10 4.5-10 4.5z"/>
+      <path d="M6 10.7V15c0 1.3 2.7 2.6 6 2.6s6-1.3 6-2.6v-4.3"/>
+      <path d="M21.5 9v5"/>
+    </symbol>
+
+    <!-- Two people -->
+    <symbol id="icon-team" viewBox="0 0 24 24">
+      <circle cx="9" cy="8" r="3.2"/>
+      <path d="M3 19.5c0-3 2.7-5 6-5s6 2 6 5"/>
+      <path d="M16.5 5.5a3 3 0 0 1 0 5.8"/>
+      <path d="M18 14.8c2 .7 3.4 2.3 3.4 4.7"/>
+    </symbol>
+
+    <!-- School building -->
+    <symbol id="icon-school" viewBox="0 0 24 24">
+      <path d="M4 20V9l8-5 8 5v11"/>
+      <path d="M4 20h16"/>
+      <path d="M10 20v-5h4v5"/>
+      <path d="M12 8.5v2"/>
+    </symbol>
+
+    <!-- Laptop -->
+    <symbol id="icon-laptop" viewBox="0 0 24 24">
+      <rect x="4" y="5" width="16" height="10" rx="1.5"/>
+      <path d="M2 18.5h20"/>
+    </symbol>
+
+    <!-- Clock -->
+    <symbol id="icon-clock" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8.5"/>
+      <path d="M12 7v5.2l3.4 2"/>
+    </symbol>
+
+    <!-- Document -->
+    <symbol id="icon-doc" viewBox="0 0 24 24">
+      <path d="M14 3H7a1.5 1.5 0 0 0-1.5 1.5v15A1.5 1.5 0 0 0 7 21h10a1.5 1.5 0 0 0 1.5-1.5V7.5z"/>
+      <path d="M14 3v4.5h4.5"/>
+      <path d="M9 12.5h6M9 16h4"/>
+    </symbol>
+
+    <!-- Wrench, for building things -->
+    <symbol id="icon-build" viewBox="0 0 24 24">
+      <path d="M15.6 3.6a5.5 5.5 0 0 0-7 7L3.8 15.4a2 2 0 0 0 0 2.8l2 2a2 2 0 0 0 2.8 0l4.8-4.8a5.5 5.5 0 0 0 7-7l-3.1 3.1-2.9-.6-.6-2.9z"/>
+    </symbol>
+
+    <!-- Lightbulb, for mentors -->
+    <symbol id="icon-idea" viewBox="0 0 24 24">
+      <path d="M9 17.5a6 6 0 1 1 6 0v1.5a1.5 1.5 0 0 1-1.5 1.5h-3A1.5 1.5 0 0 1 9 19z"/>
+      <path d="M9.5 17.5h5"/>
+    </symbol>
+
+    <!-- Trophy -->
+    <symbol id="icon-trophy" viewBox="0 0 24 24">
+      <path d="M7.5 4h9v5a4.5 4.5 0 0 1-9 0z"/>
+      <path d="M7.5 5.5H5a2.5 2.5 0 0 0 2.5 4.5"/>
+      <path d="M16.5 5.5H19a2.5 2.5 0 0 1-2.5 4.5"/>
+      <path d="M12 13.5V17"/>
+      <path d="M8.5 20h7"/>
+      <path d="M10 20c0-1.7.7-3 2-3s2 1.3 2 3"/>
+    </symbol>
+
+    <!-- Medal -->
+    <symbol id="icon-medal" viewBox="0 0 24 24">
+      <circle cx="12" cy="15" r="5"/>
+      <path d="M8.5 10.5 6 3.5h4L12 8"/>
+      <path d="M15.5 10.5 18 3.5h-4L12 8"/>
+    </symbol>
+
+    <!-- Chip, for AI and smart tech -->
+    <symbol id="icon-chip" viewBox="0 0 24 24">
+      <rect x="7" y="7" width="10" height="10" rx="2"/>
+      <path d="M10 3.5v3M14 3.5v3M10 17.5v3M14 17.5v3"/>
+      <path d="M3.5 10h3M3.5 14h3M17.5 10h3M17.5 14h3"/>
+    </symbol>
+
+    <!-- Open book, for education -->
+    <symbol id="icon-book" viewBox="0 0 24 24">
+      <path d="M12 6.5C10.4 5.2 8.4 4.5 6 4.5H3.5v13H6c2.4 0 4.4.7 6 2"/>
+      <path d="M12 6.5c1.6-1.3 3.6-2 6-2h2.5v13H18c-2.4 0-4.4.7-6 2z"/>
+      <path d="M12 6.5v15"/>
+    </symbol>
+
+    <!-- Leaf, for sustainability -->
+    <symbol id="icon-leaf" viewBox="0 0 24 24">
+      <path d="M20 4c0 9-5.2 13.5-10.5 13.5A5.5 5.5 0 0 1 4 12C4 6.8 9.5 4 20 4z"/>
+      <path d="M4.5 20C7 15 11 11.5 16 9.5"/>
+    </symbol>
+
+    <!-- Shield with a pulse, for health and safety -->
+    <symbol id="icon-shield" viewBox="0 0 24 24">
+      <path d="M12 3 20 6v6c0 4.4-3.3 7.8-8 9-4.7-1.2-8-4.6-8-9V6z"/>
+      <path d="M8 12h2l1.3-2.5L13 14l1-2h2"/>
+    </symbol>
+
+    <!-- Spark, for open innovation -->
+    <symbol id="icon-spark" viewBox="0 0 24 24">
+      <path d="M12 3.5 13.9 9 19.5 11 13.9 13 12 18.5 10.1 13 4.5 11 10.1 9z"/>
+      <path d="M18.5 4v3M20 5.5h-3"/>
+    </symbol>
+  </defs>
+</svg>
 
 <!-- ============================================================
      NAVIGATION BAR
@@ -18,14 +137,23 @@
   <div class="container nav-inner">
 
     <a href="#home" class="logo">
-      <!-- Replace this span with <img src="logo.png" alt="..." class="logo-img">
-           once your graphic student makes the logo. -->
-      <span class="logo-mark">EYI</span>
+      <!-- The simple mark. Same shape as the browser tab icon in favicon.svg,
+           so if you change one, change the other to match. -->
+      <svg class="logo-mark" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="30" fill="none" stroke="#FFFFFF"
+                stroke-opacity="0.22" stroke-width="9"/>
+        <circle cx="50" cy="50" r="30" fill="none" stroke="#FFFFFF" stroke-width="9"
+                stroke-linecap="round" stroke-dasharray="141.4 188.5"
+                transform="rotate(-90 50 50)"/>
+        <circle cx="20" cy="50" r="7" fill="#FFC83D"/>
+      </svg>
       <span class="logo-text">Young Innovators</span>
     </a>
 
     <nav id="site-nav" class="nav-links" aria-label="Main navigation">
       <a href="#about">About</a>
+      <a href="#tracks">Tracks</a>
+      <a href="#gallery">Gallery</a>
       <a href="#timeline">Timeline</a>
       <a href="#eligibility">Who can join</a>
       <a href="#prizes">Prizes</a>
@@ -55,9 +183,18 @@
        HERO
        ============================================================ -->
   <section class="hero" id="home">
+
+    <!-- Event badge. Shown large on a laptop beside the title, and
+         smaller above the title on a phone. -->
+    <img class="hero-badge" src="images/badge.jpg" width="900" height="900"
+         alt="Echelon Young Innovators Hackathon 2026 badge showing three students,
+              a lightbulb and a laptop">
+
     <div class="container">
 
       <p class="eyebrow">Echelon Institute of Technology, Faridabad</p>
+
+      <p class="badge">Free to enter</p>
 
       <h1 class="hero-title">Echelon Young&nbsp;Innovators Hackathon 2026</h1>
 
@@ -103,8 +240,8 @@
           <dd>21 November 2026</dd>
         </div>
         <div class="fact">
-          <dt>Format</dt>
-          <dd>Online round, offline finale</dd>
+          <dt>Tracks</dt>
+          <dd>Five to choose from</dd>
         </div>
         <div class="fact">
           <dt>Team size</dt>
@@ -113,6 +250,10 @@
         <div class="fact">
           <dt>Open to</dt>
           <dd>Classes 9 to 12</dd>
+        </div>
+        <div class="fact">
+          <dt>Entry fee</dt>
+          <dd>None, it is free</dd>
         </div>
       </dl>
 
@@ -145,19 +286,116 @@
 
       <ul class="highlights">
         <li>
-          <h3>Build, don't just pitch</h3>
-          <p>You leave with a prototype that runs, not a slide deck about one.</p>
+          <svg class="icon" aria-hidden="true"><use href="#icon-build"></use></svg>
+          <div>
+            <h3>Build, don't just pitch</h3>
+            <p>You leave with a prototype that runs, not a slide deck about one.</p>
+          </div>
         </li>
         <li>
-          <h3>Mentors on the floor</h3>
-          <p>Industry mentors are there through the finale to unblock you.</p>
+          <svg class="icon" aria-hidden="true"><use href="#icon-idea"></use></svg>
+          <div>
+            <h3>Mentors on the floor</h3>
+            <p>Industry mentors are there through the finale to unblock you.</p>
+          </div>
         </li>
         <li>
-          <h3>Judged on the work</h3>
-          <p>Present to a panel of judges at the end of the day.</p>
+          <svg class="icon" aria-hidden="true"><use href="#icon-trophy"></use></svg>
+          <div>
+            <h3>Judged on the work</h3>
+            <p>Present to a panel of judges at the end of the day.</p>
+          </div>
         </li>
       </ul>
 
+    </div>
+  </section>
+
+  <!-- ============================================================
+       TRACKS
+
+       To add a track, copy one <li> block and change the icon,
+       heading and sentence. The grid adjusts to the number of items.
+       ============================================================ -->
+  <section class="section section-alt" id="tracks">
+    <div class="container">
+      <h2>Five tracks. Pick the one your idea fits.</h2>
+      <p class="section-intro">
+        Choose a track when you register. If your idea does not sit neatly in one of the first
+        four, Open Innovation is where it belongs.
+      </p>
+
+      <ul class="tracks">
+        <li>
+          <svg class="icon icon-lg" aria-hidden="true"><use href="#icon-chip"></use></svg>
+          <h3>AI &amp; Smart Tech</h3>
+          <p>Machine learning, automation and smart devices put to work on a real problem.</p>
+        </li>
+        <li>
+          <svg class="icon icon-lg" aria-hidden="true"><use href="#icon-book"></use></svg>
+          <h3>Education &amp; Digital Learning</h3>
+          <p>Tools that make learning easier, cheaper or available to more students.</p>
+        </li>
+        <li>
+          <svg class="icon icon-lg" aria-hidden="true"><use href="#icon-leaf"></use></svg>
+          <h3>Sustainability &amp; Environment</h3>
+          <p>Ideas that cut waste, save energy or help people live more lightly.</p>
+        </li>
+        <li>
+          <svg class="icon icon-lg" aria-hidden="true"><use href="#icon-shield"></use></svg>
+          <h3>Health, Safety &amp; Society</h3>
+          <p>Projects that keep people healthier, safer or better connected to help.</p>
+        </li>
+        <li>
+          <svg class="icon icon-lg" aria-hidden="true"><use href="#icon-spark"></use></svg>
+          <h3>Open Innovation</h3>
+          <p>Anything else worth building. If the idea is good, bring it.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       GALLERY
+
+       To swap a photo: put the new file in the images folder and
+       change the src. Keep the alt text accurate, it is read aloud
+       to people using a screen reader and shown if an image fails.
+       loading="lazy" means a photo is only fetched once the visitor
+       scrolls near it, which keeps the page quick to open.
+       ============================================================ -->
+  <section class="section" id="gallery">
+    <div class="container">
+      <h2>What a hackathon on this campus looks like</h2>
+      <p class="section-intro">
+        Photographs from a previous hackathon held at Echelon Institute of Technology.
+      </p>
+
+      <div class="gallery">
+        <figure>
+          <img src="images/hall-wide.jpg" width="1400" height="933" loading="lazy"
+               alt="A full lecture hall of students working on laptops during a hackathon">
+          <figcaption>The hall fills up and stays full.</figcaption>
+        </figure>
+
+        <figure>
+          <img src="images/hall-working.jpg" width="1400" height="934" loading="lazy"
+               alt="Students at tiered desks concentrating on their laptops">
+          <figcaption>Heads down, hours on the clock.</figcaption>
+        </figure>
+
+        <figure>
+          <img src="images/team-night.jpg" width="1400" height="934" loading="lazy"
+               alt="A group of participants standing together outside the venue at night">
+          <figcaption>Teams at the end of a long build.</figcaption>
+        </figure>
+
+        <figure>
+          <img src="images/campus-break.jpg" width="1400" height="934" loading="lazy"
+               alt="Students sitting outside on the campus lawn during a break">
+          <figcaption>Breaks on the lawn between rounds.</figcaption>
+        </figure>
+      </div>
     </div>
   </section>
 
@@ -207,26 +445,32 @@
 
       <div class="rules">
         <div class="rule">
+          <svg class="icon" aria-hidden="true"><use href="#icon-cap"></use></svg>
           <h3>Classes 9 to 12</h3>
           <p>Only school students from Class 9 to Class 12 are eligible to take part.</p>
         </div>
         <div class="rule">
+          <svg class="icon" aria-hidden="true"><use href="#icon-team"></use></svg>
           <h3>Teams of 2 to 4</h3>
           <p>You cannot enter alone. Minimum two members, maximum four.</p>
         </div>
         <div class="rule">
+          <svg class="icon" aria-hidden="true"><use href="#icon-school"></use></svg>
           <h3>One school per team</h3>
           <p>Every member of a team must be from the same school.</p>
         </div>
         <div class="rule">
+          <svg class="icon" aria-hidden="true"><use href="#icon-laptop"></use></svg>
           <h3>Online, then on campus</h3>
           <p>The first round is online. Shortlisted teams attend the finale in person.</p>
         </div>
         <div class="rule">
+          <svg class="icon" aria-hidden="true"><use href="#icon-clock"></use></svg>
           <h3>Nine hours to build</h3>
           <p>The finale runs 9:00 AM to 6:00 PM on 21 November 2026.</p>
         </div>
         <div class="rule rule-pending">
+          <svg class="icon" aria-hidden="true"><use href="#icon-doc"></use></svg>
           <h3>Detailed rules</h3>
           <p>Submission format, judging criteria and the code of conduct will be announced.</p>
         </div>
@@ -239,23 +483,26 @@
        ============================================================ -->
   <section class="section section-alt" id="prizes">
     <div class="container">
-      <h2>Prizes</h2>
+      <h2>A prize pool of &#8377;37,100</h2>
       <p class="section-intro">
-        Prize details are being finalised and will be announced before registration closes.
+        Awarded to the top three teams at the grand finale.
       </p>
 
       <div class="prize-row">
         <div class="prize-card prize-card-first">
+          <svg class="icon icon-lg" aria-hidden="true"><use href="#icon-trophy"></use></svg>
           <p class="prize-rank">First place</p>
-          <p class="prize-value">To be announced</p>
+          <p class="prize-value">&#8377;21,000</p>
         </div>
         <div class="prize-card">
+          <svg class="icon icon-lg" aria-hidden="true"><use href="#icon-medal"></use></svg>
           <p class="prize-rank">Second place</p>
-          <p class="prize-value">To be announced</p>
+          <p class="prize-value">&#8377;11,000</p>
         </div>
         <div class="prize-card">
+          <svg class="icon icon-lg" aria-hidden="true"><use href="#icon-medal"></use></svg>
           <p class="prize-rank">Third place</p>
-          <p class="prize-value">To be announced</p>
+          <p class="prize-value">&#8377;5,100</p>
         </div>
       </div>
     </div>
@@ -269,6 +516,7 @@
       <h2>Registration closes 30 October 2026</h2>
       <p>
         Get your team of two to four together and sign up on Unstop. Registration is free.
+        Any questions, call <a href="tel:+919310268975">+91 93102 68975</a>.
       </p>
       <a href="https://unstop.com/p/echelon-young-innovators-hackathon-2026-echelon-institute-of-technology-1768767"
          class="btn btn-lg" target="_blank" rel="noopener noreferrer">Register on Unstop</a>
@@ -302,6 +550,11 @@
         </details>
 
         <details>
+          <summary>Is there a registration fee?</summary>
+          <p>No. Taking part is completely free.</p>
+        </details>
+
+        <details>
           <summary>Can I take part on my own?</summary>
           <p>No. The minimum team size is two.</p>
         </details>
@@ -313,8 +566,17 @@
         </details>
 
         <details>
+          <summary>I have a question that is not answered here. Who do I ask?</summary>
+          <p>Call the Student Coordinator, Yogita, on
+             <a href="tel:+917827669804">+91 78276 69804</a>, or the Faculty Coordinator,
+             Mr. Pranav Bhati, on <a href="tel:+917065437032">+91 70654 37032</a>.</p>
+        </details>
+
+        <details>
           <summary>What are the themes or problem statements?</summary>
-          <p>To be announced before the online round opens.</p>
+          <p>There are five tracks: AI and Smart Tech, Education and Digital Learning,
+             Sustainability and Environment, Health, Safety and Society, and Open Innovation.
+             You pick one when you register.</p>
         </details>
 
         <details>
@@ -339,21 +601,36 @@
           Organised by the Department of Computer Science and Engineering,
           Echelon Institute of Technology, Faridabad.
         </p>
+        <p class="affiliation">
+          An initiative by &ldquo;The Last Centre&rdquo;.
+          Affiliated to Guru Gobind Singh Indraprastha University.
+        </p>
       </div>
 
       <dl class="contact-details">
+        <div>
+          <dt>Faculty Coordinator</dt>
+          <!-- tel: makes the number tappable on a phone -->
+          <dd>Mr. Pranav Bhati<br>
+              <a href="tel:+917065437032">+91 70654 37032</a></dd>
+        </div>
+        <div>
+          <dt>Student Coordinator</dt>
+          <dd>Yogita<br>
+              <a href="tel:+917827669804">+91 78276 69804</a></dd>
+        </div>
+        <div>
+          <dt>General queries</dt>
+          <dd><a href="tel:+919310268975">+91 93102 68975</a></dd>
+        </div>
         <div>
           <dt>Venue</dt>
           <dd>Echelon Institute of Technology, Faridabad, Haryana</dd>
         </div>
         <div>
           <dt>Email</dt>
-          <!-- Replace with the real address:
+          <!-- Replace with the real address when you have it:
                <dd><a href="mailto:name@echelon.edu.in">name@echelon.edu.in</a></dd> -->
-          <dd>To be announced</dd>
-        </div>
-        <div>
-          <dt>Phone</dt>
           <dd>To be announced</dd>
         </div>
       </dl>
@@ -372,6 +649,10 @@
     <p class="footer-meta">
       Department of Computer Science and Engineering,
       Echelon Institute of Technology, Faridabad
+    </p>
+    <p class="footer-meta">
+      An initiative by &ldquo;The Last Centre&rdquo; &middot;
+      Affiliated to Guru Gobind Singh Indraprastha University
     </p>
     <p class="footer-meta">&copy; <span id="year">2026</span> Echelon Institute of Technology</p>
     <a href="#home" class="footer-top">Back to top</a>
