@@ -256,46 +256,69 @@ p { color: var(--text-dim); }
 
 /* --- Hero badge ---
    The stage holds the perspective. Without it a rotated element looks
-   flat and skewed instead of turned in space. */
+   flat and skewed instead of genuinely turned in space. A smaller
+   perspective number means a stronger, more obvious effect. */
 .hero-badge-stage {
   position: absolute;
   top: 50%;
   right: 1vw;
   width: min(40vw, 470px);
   transform: translateY(-50%);
-  perspective: 1100px;
+  perspective: 800px;
   pointer-events: none;      /* clicks pass straight through */
   z-index: 0;
 }
 
+/* The box that turns. The picture and the highlight are inside it. */
 .hero-badge {
+  position: relative;
   display: block;
-  width: 100%;
-  height: auto;
 
   /* The fade. The centre of this gradient sits to the right of the
      image, so the left edge, the side the text is on, dissolves away
-     while the right side stays solid. No hard edge anywhere. */
+     while the right side stays solid. */
   -webkit-mask-image: radial-gradient(ellipse 76% 72% at 64% 50%,
                         #000 38%, rgba(0,0,0,0.75) 56%, transparent 76%);
           mask-image: radial-gradient(ellipse 76% 72% at 64% 50%,
                         #000 38%, rgba(0,0,0,0.75) 56%, transparent 76%);
 
-  /* The 3D. A turn away from the viewer plus a slight lift, with a
-     coloured shadow underneath so it reads as an object with depth. */
-  transform: rotateY(-14deg) rotateX(6deg);
+  transform: rotateY(-20deg) rotateX(9deg);
   transform-style: preserve-3d;
-  transition: transform 0.25s ease-out;
+  transition: transform 0.12s ease-out;   /* quick, so it feels attached to the cursor */
   filter:
-    drop-shadow(0 18px 30px rgba(0, 0, 0, 0.55))
-    drop-shadow(0 0 46px rgba(37, 99, 235, 0.35));
+    drop-shadow(0 22px 34px rgba(0, 0, 0, 0.6))
+    drop-shadow(0 0 52px rgba(37, 99, 235, 0.4));
   animation: badge-float 9s ease-in-out infinite;
+}
+
+.hero-badge-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* A band of light across the badge. It slides as the badge turns,
+   which is the detail that makes a flat picture read as a solid
+   object catching the light. */
+.badge-sheen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+      var(--sheen-angle, 115deg),
+      transparent 32%,
+      rgba(255, 255, 255, 0.20) 48%,
+      rgba(255, 255, 255, 0.34) 52%,
+      transparent 68%);
+  opacity: 0.55;
+  mix-blend-mode: screen;     /* behaves like light, not white paint */
+  transition: opacity 0.2s ease-out;
+  pointer-events: none;
 }
 
 /* A slow rise and fall, so it feels suspended rather than stuck on */
 @keyframes badge-float {
   0%, 100% { translate: 0 0; }
-  50%      { translate: 0 -14px; }
+  50%      { translate: 0 -16px; }
 }
 
 /* Text must stay above the badge */
@@ -467,7 +490,10 @@ p { color: var(--text-dim); }
 }
 
 
-/* =========== 8. ELIGIBILITY ========================= */
+/* =========== 8. ELIGIBILITY (flip cards) ============
+   Each card is a button so it works with a mouse, a finger and the
+   keyboard. The inner box turns; the two faces sit back to back.
+   ==================================================== */
 .rules {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -476,20 +502,81 @@ p { color: var(--text-dim); }
 }
 
 .rule {
-  background-color: var(--navy-soft);
-  border: 1px solid var(--navy-line);
-  border-radius: 12px;
-  padding: 24px;
+  /* Reset the browser's own button styling */
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+
+  height: 190px;
+  perspective: 900px;      /* depth for the turn */
 }
 
-.rule .icon { margin-bottom: 12px; }
+.rule-inner {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
 
-.rule p { font-size: 15px; }
+/* When the card is open, the inner box has turned half a circle */
+.rule[aria-expanded="true"] .rule-inner { transform: rotateY(180deg); }
 
-/* Items still awaiting information get a dashed outline */
-.rule-pending {
+.rule-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+  padding: 22px;
+  border-radius: 12px;
+  background-color: var(--navy-soft);
+  border: 1px solid var(--navy-line);
+
+  /* Hides whichever face is turned away, so you never see it mirrored */
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+}
+
+.rule-back {
+  transform: rotateY(180deg);
+  background-color: var(--navy);
+  border-color: var(--blue);
+}
+
+.rule-title { font-size: 18px; font-weight: 600; }
+
+.rule-detail { font-size: 15px; color: var(--text-dim); line-height: 1.55; }
+
+.rule-hint {
+  font-size: 12px;
+  color: var(--text-dim);
+  opacity: 0.75;
+  margin-top: auto;
+}
+
+.rule .icon { margin-bottom: 2px; }
+
+/* A small lift on hover, so it reads as something you can press */
+.rule:hover .rule-inner { transform: translateY(-3px); }
+.rule[aria-expanded="true"]:hover .rule-inner { transform: rotateY(180deg) translateY(-3px); }
+
+/* The card still awaiting information keeps its dashed outline */
+.rule-pending .rule-front {
   background-color: transparent;
   border-style: dashed;
+}
+
+/* People who asked their device to reduce motion get an instant swap */
+@media (prefers-reduced-motion: reduce) {
+  .rule-inner { transition: none; }
 }
 
 
@@ -691,6 +778,8 @@ p { color: var(--text-dim); }
             mask-image: radial-gradient(circle at 50% 50%, #000 63%, transparent 74%);
     filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.5));
   }
+
+  .badge-sheen { display: none; }
 }
 
 @media (max-width: 700px) {

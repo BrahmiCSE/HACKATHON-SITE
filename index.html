@@ -188,9 +188,14 @@
          The wrapper provides the perspective that makes the tilt look
          three dimensional rather than squashed. -->
     <div class="hero-badge-stage" aria-hidden="true">
-      <img class="hero-badge" id="hero-badge" src="images/badge.jpg" width="900" height="900"
-           alt="Echelon Young Innovators Hackathon 2026 badge showing three students,
-                a lightbulb and a laptop">
+      <!-- This inner box is what turns. The picture and the moving
+           highlight sit inside it so they rotate together. -->
+      <div class="hero-badge" id="hero-badge">
+        <img class="hero-badge-img" src="images/badge.jpg" width="900" height="900"
+             alt="Echelon Young Innovators Hackathon 2026 badge showing three students,
+                  a lightbulb and a laptop">
+        <span class="badge-sheen"></span>
+      </div>
     </div>
 
     <div class="container">
@@ -401,38 +406,87 @@
   <section class="section" id="eligibility">
     <div class="container">
       <h2>Who can take part</h2>
+      <p class="section-intro">Tap any card to read the detail.</p>
 
       <div class="rules">
-        <div class="rule">
-          <svg class="icon" aria-hidden="true"><use href="#icon-cap"></use></svg>
-          <h3>Classes 9 to 12</h3>
-          <p>Only school students from Class 9 to Class 12 are eligible to take part.</p>
-        </div>
-        <div class="rule">
-          <svg class="icon" aria-hidden="true"><use href="#icon-team"></use></svg>
-          <h3>Teams of 2 to 4</h3>
-          <p>You cannot enter alone. Minimum two members, maximum four.</p>
-        </div>
-        <div class="rule">
-          <svg class="icon" aria-hidden="true"><use href="#icon-school"></use></svg>
-          <h3>One school per team</h3>
-          <p>Every member of a team must be from the same school.</p>
-        </div>
-        <div class="rule">
-          <svg class="icon" aria-hidden="true"><use href="#icon-laptop"></use></svg>
-          <h3>Online, then on campus</h3>
-          <p>The first round is online. Shortlisted teams attend the finale in person.</p>
-        </div>
-        <div class="rule">
-          <svg class="icon" aria-hidden="true"><use href="#icon-clock"></use></svg>
-          <h3>Nine hours to build</h3>
-          <p>The finale runs 9:00 AM to 6:00 PM on 21 November 2026.</p>
-        </div>
-        <div class="rule rule-pending">
-          <svg class="icon" aria-hidden="true"><use href="#icon-doc"></use></svg>
-          <h3>Detailed rules</h3>
-          <p>Submission format, judging criteria and the code of conduct will be announced.</p>
-        </div>
+        <button class="rule" type="button" aria-expanded="false">
+          <span class="rule-inner">
+            <span class="rule-face rule-front">
+              <svg class="icon" aria-hidden="true"><use href="#icon-cap"></use></svg>
+              <span class="rule-title">Classes 9 to 12</span>
+              <span class="rule-hint">Tap to read</span>
+            </span>
+            <span class="rule-face rule-back">
+              <span class="rule-detail">Only school students from Class 9 to Class 12 are eligible to take part.</span>
+              <span class="rule-hint">Tap to go back</span>
+            </span>
+          </span>
+        </button>
+        <button class="rule" type="button" aria-expanded="false">
+          <span class="rule-inner">
+            <span class="rule-face rule-front">
+              <svg class="icon" aria-hidden="true"><use href="#icon-team"></use></svg>
+              <span class="rule-title">Teams of 2 to 4</span>
+              <span class="rule-hint">Tap to read</span>
+            </span>
+            <span class="rule-face rule-back">
+              <span class="rule-detail">You cannot enter alone. Minimum two members, maximum four.</span>
+              <span class="rule-hint">Tap to go back</span>
+            </span>
+          </span>
+        </button>
+        <button class="rule" type="button" aria-expanded="false">
+          <span class="rule-inner">
+            <span class="rule-face rule-front">
+              <svg class="icon" aria-hidden="true"><use href="#icon-school"></use></svg>
+              <span class="rule-title">One school per team</span>
+              <span class="rule-hint">Tap to read</span>
+            </span>
+            <span class="rule-face rule-back">
+              <span class="rule-detail">Every member of a team must be from the same school.</span>
+              <span class="rule-hint">Tap to go back</span>
+            </span>
+          </span>
+        </button>
+        <button class="rule" type="button" aria-expanded="false">
+          <span class="rule-inner">
+            <span class="rule-face rule-front">
+              <svg class="icon" aria-hidden="true"><use href="#icon-laptop"></use></svg>
+              <span class="rule-title">Online, then on campus</span>
+              <span class="rule-hint">Tap to read</span>
+            </span>
+            <span class="rule-face rule-back">
+              <span class="rule-detail">The first round is online. Shortlisted teams attend the finale in person.</span>
+              <span class="rule-hint">Tap to go back</span>
+            </span>
+          </span>
+        </button>
+        <button class="rule" type="button" aria-expanded="false">
+          <span class="rule-inner">
+            <span class="rule-face rule-front">
+              <svg class="icon" aria-hidden="true"><use href="#icon-clock"></use></svg>
+              <span class="rule-title">Nine hours to build</span>
+              <span class="rule-hint">Tap to read</span>
+            </span>
+            <span class="rule-face rule-back">
+              <span class="rule-detail">The finale runs 9:00 AM to 6:00 PM on 21 November 2026.</span>
+              <span class="rule-hint">Tap to go back</span>
+            </span>
+          </span>
+        </button>
+        <button class="rule rule-pending" type="button" aria-expanded="false">
+          <span class="rule-inner">
+            <span class="rule-face rule-front">
+              <svg class="icon" aria-hidden="true"><use href="#icon-doc"></use></svg>
+              <span class="rule-title">Detailed rules</span>
+              <span class="rule-hint">Tap to read</span>
+            </span>
+            <span class="rule-face rule-back">
+              <span class="rule-detail">Submission format, judging criteria and the code of conduct will be announced.</span>
+              <span class="rule-hint">Tap to go back</span>
+            </span>
+          </span>
+        </button>
       </div>
     </div>
   </section>

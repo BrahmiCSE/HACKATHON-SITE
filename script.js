@@ -156,55 +156,95 @@ function initBadgeTilt() {
 
   if (!badge || !hero) { return; }
 
-  var canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  var sheen = badge.querySelector(".badge-sheen");
+
+  var canHover   = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
   var wideEnough = window.matchMedia("(min-width: 981px)").matches;
-  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var reduced    = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   if (!canHover || !wideEnough || reduced) { return; }
 
-  var RESTING_Y = -14;   // the angles the CSS sets when the pointer is away
-  var RESTING_X = 6;
-  var SWING = 11;        // how far it is allowed to turn, in degrees
+  var RESTING_Y = -20;   // the angles the CSS sets when the pointer is away
+  var RESTING_X = 9;
+  var SWING = 22;        // how far it may turn left or right, in degrees
   var pending = false;
+  var lastEvent = null;
 
-  function apply(event) {
+  function apply() {
+    if (!lastEvent) { return; }
+
     var box = hero.getBoundingClientRect();
 
-    // Where the pointer is inside the hero, as -1 to 1 on each axis
-    var x = (event.clientX - box.left) / box.width * 2 - 1;
-    var y = (event.clientY - box.top) / box.height * 2 - 1;
+    // Where the pointer sits inside the hero, as -1 to 1 on each axis
+    var x = (lastEvent.clientX - box.left) / box.width * 2 - 1;
+    var y = (lastEvent.clientY - box.top) / box.height * 2 - 1;
 
-    // Clamp, so a pointer just outside cannot throw it to an extreme
+    // Clamp, so a pointer near the edge cannot throw it to an extreme
     x = Math.max(-1, Math.min(1, x));
     y = Math.max(-1, Math.min(1, y));
 
     var rotY = RESTING_Y + x * SWING;
-    var rotX = RESTING_X - y * SWING * 0.6;
+    var rotX = RESTING_X - y * SWING * 0.55;
 
-    badge.style.transform = "rotateY(" + rotY.toFixed(2) + "deg) " +
-                            "rotateX(" + rotX.toFixed(2) + "deg)";
+    badge.style.transform =
+      "rotateY(" + rotY.toFixed(2) + "deg) rotateX(" + rotX.toFixed(2) + "deg)";
+
+    // Swing the band of light the opposite way, the way a real
+    // reflection slides across a surface as you turn it.
+    if (sheen) {
+      var angle = 115 - x * 55;
+      sheen.style.setProperty("--sheen-angle", angle.toFixed(1) + "deg");
+      sheen.style.opacity = String(0.45 + Math.abs(x) * 0.4);
+    }
   }
 
   hero.addEventListener("mousemove", function (event) {
-    // Only recalculate once per frame, so moving the mouse fast
-    // cannot flood the browser with work.
+    lastEvent = event;
+    // Recalculate at most once per screen refresh, so moving the mouse
+    // quickly cannot flood the browser with work.
     if (pending) { return; }
     pending = true;
     window.requestAnimationFrame(function () {
       pending = false;
-      apply(event);
+      apply();
     });
   });
 
   // Settle back to the resting angle when the pointer leaves
   hero.addEventListener("mouseleave", function () {
-    badge.style.transform = "rotateY(" + RESTING_Y + "deg) rotateX(" + RESTING_X + "deg)";
+    lastEvent = null;
+    badge.style.transform =
+      "rotateY(" + RESTING_Y + "deg) rotateX(" + RESTING_X + "deg)";
+    if (sheen) {
+      sheen.style.setProperty("--sheen-angle", "115deg");
+      sheen.style.opacity = "0.55";
+    }
   });
 }
 
 
 /* -----------------------------------------------------------
-   4. FOOTER YEAR
+   4. FLIP CARDS
+
+   Each card in "Who can take part" turns over when pressed.
+   The cards are buttons, so Enter and Space already work and
+   screen readers announce them. All this does is flip the
+   aria-expanded value; the CSS does the turning.
+   ----------------------------------------------------------- */
+function initFlipCards() {
+  var cards = document.querySelectorAll(".rule");
+
+  for (var i = 0; i < cards.length; i++) {
+    cards[i].addEventListener("click", function () {
+      var open = this.getAttribute("aria-expanded") === "true";
+      this.setAttribute("aria-expanded", open ? "false" : "true");
+    });
+  }
+}
+
+
+/* -----------------------------------------------------------
+   5. FOOTER YEAR
    ----------------------------------------------------------- */
 function initYear() {
   var yearEl = document.getElementById("year");
@@ -222,13 +262,5 @@ function initYear() {
 initCountdown();
 initMenu();
 initBadgeTilt();
-initYear();
-
-/* -----------------------------------------------------------
-   START
-   The script tag sits at the end of the body, so the HTML is
-   already loaded by the time this runs.
-   ----------------------------------------------------------- */
-initCountdown();
-initMenu();
+initFlipCards();
 initYear();
