@@ -432,14 +432,19 @@ p { color: var(--text-dim); }
 /* =========== 6. ABOUT =============================== */
 .about-grid {
   display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap: 56px;
-  align-items: start;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
 }
 
 .about-grid p + p { margin-top: 14px; }
 
-.highlights { display: grid; gap: 18px; }
+.highlights {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: 44px;
+}
 
 .highlights li {
   display: flex;
@@ -1072,6 +1077,136 @@ p { color: var(--text-dim); }
   .hud-dot { animation: none; }
 }
 
+
+/* --- Small icons sitting inside labels --- */
+.icon-sm {
+  width: 14px;
+  height: 14px;
+  stroke-width: 2;
+  vertical-align: -2px;
+  margin-right: 7px;
+  color: var(--blue);
+}
+
+.fact dt,
+.contact-details dt {
+  display: flex;
+  align-items: center;
+}
+
+/* --- Code window ---
+   A window drawn with HTML and CSS rather than a picture, so the
+   text stays sharp at any size and weighs nothing. */
+.codewin {
+  border: 1px solid var(--navy-line);
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #0A1A31;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.45);
+  font-family: var(--mono);
+}
+
+.codewin-bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 11px 14px;
+  background-color: #122B4C;
+  border-bottom: 1px solid var(--navy-line);
+}
+
+.codewin-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.codewin-dot-1 { background-color: #FF5F57; }
+.codewin-dot-2 { background-color: #FFBD2E; }
+.codewin-dot-3 { background-color: #28C840; }
+
+.codewin-name {
+  margin-left: 8px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+}
+
+.codewin-body {
+  margin: 0;
+  padding: 16px 16px 18px;
+  font-size: 12.5px;
+  line-height: 1.85;
+  overflow-x: auto;
+  color: #D7E3F7;
+}
+
+/* Line numbers sit in the gutter */
+.codewin .ln {
+  display: inline-block;
+  width: 24px;
+  margin-right: 12px;
+  text-align: right;
+  color: #3F5F8F;
+  user-select: none;
+}
+
+/* Syntax colours */
+.codewin .kw { color: #C792EA; }   /* const */
+.codewin .vr { color: #82AAFF; }   /* variable */
+.codewin .pr { color: #7FD6E8; }   /* property */
+.codewin .st { color: #C3E88D; }   /* string */
+.codewin .nu { color: #F78C6C; }   /* number */
+.codewin .fn { color: #FFC83D; }   /* function */
+.codewin .cm { color: #546E8F; }   /* comment */
+
+/* A blinking cursor at the end of the last line */
+.caret {
+  display: inline-block;
+  width: 8px;
+  height: 15px;
+  margin-left: 4px;
+  vertical-align: -3px;
+  background-color: var(--yellow);
+  animation: caret-blink 1.1s steps(1) infinite;
+}
+
+@keyframes caret-blink {
+  0%, 50%   { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* --- Circuit artwork behind the tracks --- */
+#tracks { position: relative; overflow: hidden; }
+
+.circuit {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* Short bright segments that travel along the traces, like a signal */
+.trace {
+  stroke-dasharray: 90 2000;
+  stroke-dashoffset: 2090;
+  animation: trace-run 7s linear infinite;
+  filter: drop-shadow(0 0 5px currentColor);
+}
+
+.trace-late { animation-duration: 9s; animation-delay: 2.5s; }
+
+@keyframes trace-run {
+  to { stroke-dashoffset: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trace { animation: none; opacity: 0; }
+  .caret { animation: none; }
+}
+
 /* =========== 13. MOBILE ADJUSTMENTS =================
    These rules apply only on screens narrower than 860px.
    ==================================================== */
@@ -1079,10 +1214,17 @@ p { color: var(--text-dim); }
 
   .about-grid,
   .faq-grid,
-  .contact-grid {
+  .contact-grid,
+  .highlights {
     grid-template-columns: 1fr;
     gap: 32px;
   }
+
+  .highlights { gap: 16px; margin-top: 30px; }
+
+  .codewin-body { font-size: 11px; padding: 12px 10px 14px; }
+
+  .codewin .ln { width: 18px; margin-right: 8px; }
 
   .rules {
     grid-template-columns: 1fr;

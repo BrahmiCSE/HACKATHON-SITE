@@ -132,6 +132,41 @@
       <path d="M8 12h2l1.3-2.5L13 14l1-2h2"/>
     </symbol>
 
+    <!-- Phone -->
+    <symbol id="icon-phone" viewBox="0 0 24 24">
+      <path d="M6.5 3.5h3l1.5 4-2 1.5a12 12 0 0 0 6 6l1.5-2 4 1.5v3a2 2 0 0 1-2.2 2A17 17 0 0 1 4.5 5.7 2 2 0 0 1 6.5 3.5z"/>
+    </symbol>
+
+    <!-- Map pin -->
+    <symbol id="icon-pin" viewBox="0 0 24 24">
+      <path d="M12 21s7-6 7-11a7 7 0 1 0-14 0c0 5 7 11 7 11z"/>
+      <circle cx="12" cy="10" r="2.6"/>
+    </symbol>
+
+    <!-- Envelope -->
+    <symbol id="icon-mail" viewBox="0 0 24 24">
+      <rect x="3" y="5.5" width="18" height="13" rx="2"/>
+      <path d="M3.6 6.8 12 13l8.4-6.2"/>
+    </symbol>
+
+    <!-- Calendar -->
+    <symbol id="icon-calendar" viewBox="0 0 24 24">
+      <rect x="3.5" y="5" width="17" height="15" rx="2"/>
+      <path d="M3.5 9.5h17M8 3v4M16 3v4"/>
+    </symbol>
+
+    <!-- Rupee -->
+    <symbol id="icon-rupee" viewBox="0 0 24 24">
+      <path d="M7 4h10M7 8.5h10M7 13h4.5c2.5 0 4.5-1.9 4.5-4.3"/>
+      <path d="M7 13l7.5 7"/>
+    </symbol>
+
+    <!-- Terminal -->
+    <symbol id="icon-terminal" viewBox="0 0 24 24">
+      <rect x="2.5" y="4" width="19" height="16" rx="2"/>
+      <path d="M7 10l3 2.5-3 2.5M13 15h4"/>
+    </symbol>
+
     <!-- Spark, for open innovation -->
     <symbol id="icon-spark" viewBox="0 0 24 24">
       <path d="M12 3.5 13.9 9 19.5 11 13.9 13 12 18.5 10.1 13 4.5 11 10.1 9z"/>
@@ -263,23 +298,23 @@
       <!-- Quick facts -->
       <dl class="facts">
         <div class="fact">
-          <dt>Grand finale</dt>
+          <dt><svg class="icon icon-sm" aria-hidden="true"><use href="#icon-calendar"></use></svg>Grand finale</dt>
           <dd>21 November 2026</dd>
         </div>
         <div class="fact">
-          <dt>Tracks</dt>
+          <dt><svg class="icon icon-sm" aria-hidden="true"><use href="#icon-spark"></use></svg>Tracks</dt>
           <dd>Five to choose from</dd>
         </div>
         <div class="fact">
-          <dt>Team size</dt>
+          <dt><svg class="icon icon-sm" aria-hidden="true"><use href="#icon-team"></use></svg>Team size</dt>
           <dd>2 to 4 students</dd>
         </div>
         <div class="fact">
-          <dt>Open to</dt>
+          <dt><svg class="icon icon-sm" aria-hidden="true"><use href="#icon-cap"></use></svg>Open to</dt>
           <dd>Classes 9 to 12</dd>
         </div>
         <div class="fact">
-          <dt>Entry fee</dt>
+          <dt><svg class="icon icon-sm" aria-hidden="true"><use href="#icon-rupee"></use></svg>Entry fee</dt>
           <dd>None, it is free</dd>
         </div>
       </dl>
@@ -312,40 +347,87 @@
         </p>
       </div>
 
-      <ul class="highlights" data-reveal>
-        <li>
-          <svg class="icon" aria-hidden="true"><use href="#icon-build"></use></svg>
-          <div>
-            <h3>Build, don't just pitch</h3>
-            <p>You leave with a prototype that runs, not a slide deck about one.</p>
-          </div>
-        </li>
-        <li>
-          <svg class="icon" aria-hidden="true"><use href="#icon-idea"></use></svg>
-          <div>
-            <h3>Mentors on the floor</h3>
-            <p>Industry mentors are there through the finale to unblock you.</p>
-          </div>
-        </li>
-        <li>
-          <svg class="icon" aria-hidden="true"><use href="#icon-trophy"></use></svg>
-          <div>
-            <h3>Judged on the work</h3>
-            <p>Present to a panel of judges at the end of the day.</p>
-          </div>
-        </li>
-      </ul>
-
+      <!-- A code window, drawn entirely in HTML and CSS. It is
+           decorative, so it is hidden from screen readers, and the
+           same facts appear as real text elsewhere on the page. -->
+      <div class="codewin" aria-hidden="true">
+        <div class="codewin-bar">
+          <span class="codewin-dot codewin-dot-1"></span>
+          <span class="codewin-dot codewin-dot-2"></span>
+          <span class="codewin-dot codewin-dot-3"></span>
+          <span class="codewin-name">hackathon.js</span>
+        </div>
+        <pre class="codewin-body"><code><span class="ln">1</span><span class="kw">const</span> <span class="vr">hackathon</span> = {
+<span class="ln">2</span>  <span class="pr">name</span>: <span class="st">"Echelon Young Innovators"</span>,
+<span class="ln">3</span>  <span class="pr">classes</span>: [<span class="nu">9</span>, <span class="nu">10</span>, <span class="nu">11</span>, <span class="nu">12</span>],
+<span class="ln">4</span>  <span class="pr">team</span>: { <span class="pr">min</span>: <span class="nu">2</span>, <span class="pr">max</span>: <span class="nu">4</span> },
+<span class="ln">5</span>  <span class="pr">hours</span>: <span class="nu">9</span>,
+<span class="ln">6</span>  <span class="pr">tracks</span>: <span class="nu">5</span>,
+<span class="ln">7</span>  <span class="pr">prizePool</span>: <span class="nu">37100</span>,
+<span class="ln">8</span>  <span class="pr">entryFee</span>: <span class="nu">0</span>
+<span class="ln">9</span>};
+<span class="ln">10</span>
+<span class="ln">11</span><span class="vr">hackathon</span>.<span class="fn">build</span>();
+<span class="ln">12</span><span class="cm">// &rarr; prototype.ready()</span><span class="caret"></span></code></pre>
+      </div>
     </div>
+
+    <ul class="highlights container" data-reveal>
+      <li>
+        <svg class="icon" aria-hidden="true"><use href="#icon-build"></use></svg>
+        <div>
+          <h3>Build, don't just pitch</h3>
+          <p>You leave with a prototype that runs, not a slide deck about one.</p>
+        </div>
+      </li>
+      <li>
+        <svg class="icon" aria-hidden="true"><use href="#icon-idea"></use></svg>
+        <div>
+          <h3>Mentors on the floor</h3>
+          <p>Industry mentors are there through the finale to unblock you.</p>
+        </div>
+      </li>
+      <li>
+        <svg class="icon" aria-hidden="true"><use href="#icon-trophy"></use></svg>
+        <div>
+          <h3>Judged on the work</h3>
+          <p>Present to a panel of judges at the end of the day.</p>
+        </div>
+      </li>
+    </ul>
   </section>
 
   <!-- ============================================================
        TRACKS
 
        To add a track, copy one <li> block and change the icon,
-       heading and sentence. The grid adjusts to the number of items.
+       heading and sentence. The rail adjusts to the number of items.
        ============================================================ -->
   <section class="section section-alt" id="tracks">
+
+    <!-- Circuit traces, drawn in code. Decorative only. -->
+    <svg class="circuit" viewBox="0 0 1200 300" preserveAspectRatio="none" aria-hidden="true">
+      <g fill="none" stroke="#2E4D82" stroke-width="1.4">
+        <path d="M0 40 H180 L210 70 H420 L450 40 H700 L730 70 H1000 L1030 40 H1200"/>
+        <path d="M0 150 H120 L150 120 H380 L410 150 H660 L690 120 H960 L990 150 H1200"/>
+        <path d="M0 260 H240 L270 230 H520 L550 260 H820 L850 230 H1080 L1110 260 H1200"/>
+        <path d="M210 70 V150M730 70 V120M550 260 V150M990 150 V230"/>
+      </g>
+      <g fill="#2E4D82">
+        <circle cx="210" cy="70" r="4"/><circle cx="450" cy="40" r="4"/>
+        <circle cx="730" cy="70" r="4"/><circle cx="1030" cy="40" r="4"/>
+        <circle cx="150" cy="120" r="4"/><circle cx="410" cy="150" r="4"/>
+        <circle cx="690" cy="120" r="4"/><circle cx="990" cy="150" r="4"/>
+        <circle cx="270" cy="230" r="4"/><circle cx="550" cy="260" r="4"/>
+        <circle cx="850" cy="230" r="4"/><circle cx="1110" cy="260" r="4"/>
+      </g>
+      <!-- Two pulses of light travelling along the traces -->
+      <path class="trace" d="M0 150 H120 L150 120 H380 L410 150 H660 L690 120 H960 L990 150 H1200"
+            fill="none" stroke="#FFC83D" stroke-width="2"/>
+      <path class="trace trace-late" d="M0 40 H180 L210 70 H420 L450 40 H700 L730 70 H1000 L1030 40 H1200"
+            fill="none" stroke="#2563EB" stroke-width="2"/>
+    </svg>
+
     <div class="container">
       <p class="sec-index">02 / TRACKS</p>
       <h2>Five tracks. Pick the one your idea fits.</h2>
@@ -702,26 +784,26 @@
 
       <dl class="contact-details" data-reveal>
         <div>
-          <dt>Faculty Coordinator</dt>
+          <dt><svg class="icon icon-sm" aria-hidden="true"><use href="#icon-phone"></use></svg>Faculty Coordinator</dt>
           <!-- tel: makes the number tappable on a phone -->
           <dd>Mr. Pranav Bhati<br>
               <a href="tel:+917065437032">+91 70654 37032</a></dd>
         </div>
         <div>
-          <dt>Student Coordinator</dt>
+          <dt><svg class="icon icon-sm" aria-hidden="true"><use href="#icon-phone"></use></svg>Student Coordinator</dt>
           <dd>Yogita<br>
               <a href="tel:+917827669804">+91 78276 69804</a></dd>
         </div>
         <div>
-          <dt>General queries</dt>
+          <dt><svg class="icon icon-sm" aria-hidden="true"><use href="#icon-terminal"></use></svg>General queries</dt>
           <dd><a href="tel:+919310268975">+91 93102 68975</a></dd>
         </div>
         <div>
-          <dt>Venue</dt>
+          <dt><svg class="icon icon-sm" aria-hidden="true"><use href="#icon-pin"></use></svg>Venue</dt>
           <dd>Echelon Institute of Technology, Faridabad, Haryana</dd>
         </div>
         <div>
-          <dt>Email</dt>
+          <dt><svg class="icon icon-sm" aria-hidden="true"><use href="#icon-mail"></use></svg>Email</dt>
           <!-- Replace with the real address when you have it:
                <dd><a href="mailto:name@echelon.edu.in">name@echelon.edu.in</a></dd> -->
           <dd>To be announced</dd>
