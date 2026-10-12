@@ -4,7 +4,15 @@
 
    1. Countdown to the next milestone
    2. Mobile menu
-   3. Footer year
+   3. Glass scene (hero parallax)
+   4. Flip cards
+   5. Timeline progress
+   6. Reveal on scroll
+   7. Custom cursor
+   8. Status strip
+   9. Track spotlight
+  10. Poster popup
+  11. Footer year
    =========================================================== */
 
 /* "use strict" makes the browser report sloppy mistakes
@@ -65,6 +73,20 @@ function initCountdown() {
     return value < 10 ? "0" + value : String(value);
   }
 
+  var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Only touches a number when it has actually changed, and replays the
+  // small drop-in animation on it. Reading offsetWidth in between is what
+  // lets the same animation play a second time.
+  function setDigit(el, value) {
+    if (el.textContent === value) { return; }
+    el.textContent = value;
+    if (reducedMotion) { return; }
+    el.classList.remove("is-ticking");
+    void el.offsetWidth;
+    el.classList.add("is-ticking");
+  }
+
   function showFinished() {
     labelEl.textContent = FINISHED_MESSAGE;
     var row = box.querySelector(".countdown-row");
@@ -93,10 +115,10 @@ function initCountdown() {
     var totalSeconds = Math.floor(msLeft / 1000);
 
     labelEl.textContent = next.label;
-    daysEl.textContent  = pad(Math.floor(totalSeconds / 86400));
-    hoursEl.textContent = pad(Math.floor((totalSeconds % 86400) / 3600));
-    minsEl.textContent  = pad(Math.floor((totalSeconds % 3600) / 60));
-    secsEl.textContent  = pad(totalSeconds % 60);
+    setDigit(daysEl,  pad(Math.floor(totalSeconds / 86400)));
+    setDigit(hoursEl, pad(Math.floor((totalSeconds % 86400) / 3600)));
+    setDigit(minsEl,  pad(Math.floor((totalSeconds % 3600) / 60)));
+    setDigit(secsEl,  pad(totalSeconds % 60));
   }
 
   tick();                              // fill the numbers immediately
@@ -142,85 +164,90 @@ function initMenu() {
 
 
 /* -----------------------------------------------------------
-   3. BADGE TILT
+   3. GLASS SCENE
 
-   The badge turns slightly to follow the pointer, which makes it
-   read as an object sitting in space rather than a flat picture.
+   The cube and puzzle pieces in the hero respond to the pointer
+   and to scrolling. The whole group turns a little towards the
+   pointer, and each shape shifts by its own data-depth number, so
+   near pieces move more than far ones. That difference is what
+   makes it read as layered glass rather than a flat picture.
 
-   Only on pointers that can hover, so phones and tablets are left
-   alone, and skipped entirely if the visitor has asked their device
-   to reduce motion.
+   Only on wide screens. Phones keep just the gentle floating from
+   the stylesheet, and anyone who asked their device to reduce
+   motion gets a still scene.
    ----------------------------------------------------------- */
-function initBadgeTilt() {
-  var badge = document.getElementById("hero-badge");
+function initHeroScene() {
   var hero  = document.getElementById("home");
+  var inner = document.getElementById("hero-scene-inner");
 
-  if (!badge || !hero) { return; }
+  if (!hero || !inner) { return; }
 
-  var sheen = badge.querySelector(".badge-sheen");
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduced) { return; }
 
-  var canHover   = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-  var wideEnough = window.matchMedia("(min-width: 981px)").matches;
-  var reduced    = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var shapes   = inner.querySelectorAll(".shape");
+  var canHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  var wide     = window.matchMedia("(min-width: 981px)");
 
-  if (!canHover || !wideEnough || reduced) { return; }
-
-  var RESTING_Y = -20;   // the angles the CSS sets when the pointer is away
-  var RESTING_X = 9;
-  var SWING = 22;        // how far it may turn left or right, in degrees
+  var mx = 0;          // pointer position across the hero, -1 to 1
+  var my = 0;
   var pending = false;
-  var lastEvent = null;
 
-  function apply() {
-    if (!lastEvent) { return; }
+  function clamp(n) { return Math.max(-1, Math.min(1, n)); }
 
-    var box = hero.getBoundingClientRect();
+  function render() {
+    pending = false;
 
-    // Where the pointer sits inside the hero, as -1 to 1 on each axis
-    var x = (lastEvent.clientX - box.left) / box.width * 2 - 1;
-    var y = (lastEvent.clientY - box.top) / box.height * 2 - 1;
+    // On a narrow screen, clear anything set earlier and stop
+    if (!wide.matches) {
+      inner.style.transform = "";
+      for (var k = 0; k < shapes.length; k++) { shapes[k].style.transform = ""; }
+      return;
+    }
 
-    // Clamp, so a pointer near the edge cannot throw it to an extreme
-    x = Math.max(-1, Math.min(1, x));
-    y = Math.max(-1, Math.min(1, y));
+    // Only scrolling within the hero matters
+    var scrolled = Math.min(window.pageYOffset || 0, hero.offsetHeight);
 
-    var rotY = RESTING_Y + x * SWING;
-    var rotX = RESTING_X - y * SWING * 0.55;
+    inner.style.transform =
+      "rotateY(" + (mx * 14).toFixed(2) + "deg) rotateX(" + (-my * 10).toFixed(2) + "deg)";
 
-    badge.style.transform =
-      "rotateY(" + rotY.toFixed(2) + "deg) rotateX(" + rotX.toFixed(2) + "deg)";
-
-    // Swing the band of light the opposite way, the way a real
-    // reflection slides across a surface as you turn it.
-    if (sheen) {
-      var angle = 115 - x * 55;
-      sheen.style.setProperty("--sheen-angle", angle.toFixed(1) + "deg");
-      sheen.style.opacity = String(0.45 + Math.abs(x) * 0.4);
+    for (var i = 0; i < shapes.length; i++) {
+      var depth = parseFloat(shapes[i].getAttribute("data-depth")) || 1;
+      var x = mx * depth * 26;
+      var y = my * depth * 18 - scrolled * depth * 0.18;
+      var z = depth * 40;
+      shapes[i].style.transform =
+        "translate3d(" + x.toFixed(1) + "px," + y.toFixed(1) + "px," + z.toFixed(0) + "px)";
     }
   }
 
-  hero.addEventListener("mousemove", function (event) {
-    lastEvent = event;
-    // Recalculate at most once per screen refresh, so moving the mouse
-    // quickly cannot flood the browser with work.
+  // At most one update per screen refresh, however fast events arrive
+  function schedule() {
     if (pending) { return; }
     pending = true;
-    window.requestAnimationFrame(function () {
-      pending = false;
-      apply();
-    });
-  });
+    window.requestAnimationFrame(render);
+  }
 
-  // Settle back to the resting angle when the pointer leaves
-  hero.addEventListener("mouseleave", function () {
-    lastEvent = null;
-    badge.style.transform =
-      "rotateY(" + RESTING_Y + "deg) rotateX(" + RESTING_X + "deg)";
-    if (sheen) {
-      sheen.style.setProperty("--sheen-angle", "115deg");
-      sheen.style.opacity = "0.55";
-    }
-  });
+  if (canHover) {
+    hero.addEventListener("mousemove", function (event) {
+      var box = hero.getBoundingClientRect();
+      mx = clamp((event.clientX - box.left) / box.width * 2 - 1);
+      my = clamp((event.clientY - box.top) / box.height * 2 - 1);
+      schedule();
+    });
+
+    // Settle back to the middle when the pointer leaves
+    hero.addEventListener("mouseleave", function () {
+      mx = 0;
+      my = 0;
+      schedule();
+    });
+  }
+
+  window.addEventListener("scroll", schedule, { passive: true });
+  window.addEventListener("resize", schedule);
+
+  render();
 }
 
 
@@ -690,7 +717,7 @@ function initYear() {
 initPromo();
 initCountdown();
 initMenu();
-initBadgeTilt();
+initHeroScene();
 initFlipCards();
 initTimeline();
 initHud();

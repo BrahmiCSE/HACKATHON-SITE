@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Echelon Young Innovators Hackathon 2026</title>
   <meta name="description" content="An inter-school hackathon for students of Classes 9 to 12, by the Department of Computer Science and Engineering, Echelon Institute of Technology, Faridabad. Grand finale 21 November 2026.">
-  <meta name="theme-color" content="#0B1F3A">
+  <meta name="theme-color" content="#F8F5FD">
 
   <!-- Browser tab icon. The SVG is used where supported, the PNG
        is the fallback and is also what iPhones use on the home screen. -->
@@ -56,6 +56,84 @@
      ============================================================ -->
 <div class="cursor-ring" id="cursor-ring" aria-hidden="true"></div>
 <div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
+
+<!-- ============================================================
+     GLASS SHAPES AND GRADIENTS
+
+     The puzzle cube (logo and hero) and the loose puzzle pieces are
+     drawn once here and reused with <use href="#...">. This block
+     has zero size but is not display:none, because browsers will not
+     paint gradients that live in a hidden SVG.
+     ============================================================ -->
+<svg class="svg-defs" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- Cube faces: lavender top, lavender-to-blush left, icy-to-periwinkle right -->
+    <linearGradient id="g-cube-top" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.95"/>
+      <stop offset="1" stop-color="#D8CCFB" stop-opacity="0.9"/>
+    </linearGradient>
+    <linearGradient id="g-cube-left" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0" stop-color="#C6B3FA" stop-opacity="0.92"/>
+      <stop offset="1" stop-color="#F5C2D5" stop-opacity="0.9"/>
+    </linearGradient>
+    <linearGradient id="g-cube-right" x1="1" y1="0" x2="0.5" y2="1">
+      <stop offset="0" stop-color="#BFDDF7" stop-opacity="0.92"/>
+      <stop offset="1" stop-color="#A897F0" stop-opacity="0.9"/>
+    </linearGradient>
+
+    <!-- Loose pieces -->
+    <linearGradient id="g-lav" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#E4DAFD"/><stop offset="1" stop-color="#A994F3"/>
+    </linearGradient>
+    <linearGradient id="g-icy" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#EAF5FD"/><stop offset="1" stop-color="#A3CBEF"/>
+    </linearGradient>
+    <linearGradient id="g-blush" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FDE8EF"/><stop offset="1" stop-color="#F0A9C2"/>
+    </linearGradient>
+    <linearGradient id="g-peach" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFF0E5"/><stop offset="1" stop-color="#FFC7A3"/>
+    </linearGradient>
+    <linearGradient id="g-mint" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#EFFBF5"/><stop offset="1" stop-color="#A9DFC6"/>
+    </linearGradient>
+    <radialGradient id="g-orb" cx="0.35" cy="0.3" r="0.75">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="0.45" stop-color="#E2D8FC"/>
+      <stop offset="1" stop-color="#B8C9F2"/>
+    </radialGradient>
+
+    <!-- The glass puzzle cube -->
+    <symbol id="cube" viewBox="0 0 100 104">
+      <path d="M12 30 L50 52 L50 96 L12 74 Z" fill="url(#g-cube-left)"/>
+      <path d="M50 52 L88 30 L88 74 L50 96 Z" fill="url(#g-cube-right)"/>
+      <path d="M50 8 L88 30 L50 52 L12 30 Z" fill="url(#g-cube-top)"/>
+      <!-- Jigsaw seams -->
+      <g fill="none" stroke="#FFFFFF" stroke-width="1.7" stroke-linecap="round"
+         stroke-linejoin="round" stroke-opacity="0.9">
+        <path d="M31 41 V55 C24 52 24 67 31 64 V85"/>
+        <path d="M69 41 V57 C76 54 76 69 69 66 V85"/>
+        <path d="M12 52 L50 74 L88 52"/>
+        <path d="M31 19 L69 41"/>
+        <path d="M69 19 L31 41"/>
+      </g>
+      <!-- Outline and a bright front edge, where glass catches the light -->
+      <path d="M50 8 L88 30 L88 74 L50 96 L12 74 L12 30 Z" fill="none"
+            stroke="#FFFFFF" stroke-width="1.6" stroke-linejoin="round"/>
+      <path d="M12 30 L50 52 L88 30 M50 52 V96" fill="none"
+            stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-opacity="0.95"/>
+    </symbol>
+
+    <!-- A single puzzle piece. Its colour comes from the fill on <use>. -->
+    <symbol id="piece" viewBox="0 0 100 100">
+      <path d="M20 30 H40 C40 30 36 17 50 17 C64 17 60 30 60 30 H80 V45
+               C80 45 93 41 93 55 C93 69 80 65 80 65 V82 H20 V65
+               C20 65 32 69 32 55 C32 41 20 45 20 45 Z"
+            stroke="#FFFFFF" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M26 36 H38" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity="0.8"/>
+    </symbol>
+  </defs>
+</svg>
 
 <!-- ============================================================
      ICON SET
@@ -212,15 +290,10 @@
   <div class="container nav-inner">
 
     <a href="#home" class="logo">
-      <!-- The simple mark. Same shape as the browser tab icon in favicon.svg,
+      <!-- The glass puzzle cube. favicon.svg is the same drawing,
            so if you change one, change the other to match. -->
-      <svg class="logo-mark" viewBox="0 0 100 100" aria-hidden="true">
-        <circle cx="50" cy="50" r="30" fill="none" stroke="#FFFFFF"
-                stroke-opacity="0.22" stroke-width="9"/>
-        <circle cx="50" cy="50" r="30" fill="none" stroke="#FFFFFF" stroke-width="9"
-                stroke-linecap="round" stroke-dasharray="141.4 188.5"
-                transform="rotate(-90 50 50)"/>
-        <circle cx="20" cy="50" r="7" fill="#FFC83D"/>
+      <svg class="logo-mark" viewBox="0 0 100 104" aria-hidden="true">
+        <use href="#cube"></use>
       </svg>
       <span class="logo-text">Young Innovators</span>
     </a>
@@ -258,18 +331,59 @@
        ============================================================ -->
   <section class="hero" id="home">
 
-    <!-- Event badge. Shown large on a laptop beside the title, and
-         smaller above the title on a phone.
-         The wrapper provides the perspective that makes the tilt look
-         three dimensional rather than squashed. -->
-    <div class="hero-badge-stage" aria-hidden="true">
-      <!-- This inner box is what turns. The picture and the moving
-           highlight sit inside it so they rotate together. -->
-      <div class="hero-badge" id="hero-badge">
-        <img class="hero-badge-img" src="images/badge.jpg" width="900" height="900"
-             alt="Echelon Young Innovators Hackathon 2026 badge showing three students,
-                  a lightbulb and a laptop">
-        <span class="badge-sheen"></span>
+    <!-- Glass scene. A big puzzle cube with loose pieces floating
+         round it. Beside the title on a laptop, above it on a phone.
+         data-depth is how strongly each shape follows the pointer:
+         bigger numbers feel closer. --r is a resting angle, --dur
+         how long one float takes, --delay staggers them. -->
+    <div class="hero-scene" aria-hidden="true">
+      <div class="hero-scene-inner" id="hero-scene-inner">
+
+        <div class="shape shape-cube" data-depth="0.6">
+          <div class="shape-float" style="--r:0deg; --dur:10s;">
+            <svg viewBox="0 0 100 104"><use href="#cube"></use></svg>
+          </div>
+        </div>
+
+        <div class="shape shape-piece shape-p1" data-depth="1.6">
+          <div class="shape-float" style="--r:-18deg; --dur:8s; --delay:-2s;">
+            <svg viewBox="0 0 100 100"><use href="#piece" fill="url(#g-blush)"></use></svg>
+          </div>
+        </div>
+
+        <div class="shape shape-piece shape-p2" data-depth="2">
+          <div class="shape-float" style="--r:22deg; --dur:9s; --delay:-5s;">
+            <svg viewBox="0 0 100 100"><use href="#piece" fill="url(#g-icy)"></use></svg>
+          </div>
+        </div>
+
+        <div class="shape shape-piece shape-p3" data-depth="1.2">
+          <div class="shape-float" style="--r:40deg; --dur:11s; --delay:-1s;">
+            <svg viewBox="0 0 100 100"><use href="#piece" fill="url(#g-lav)"></use></svg>
+          </div>
+        </div>
+
+        <div class="shape shape-piece shape-p4" data-depth="2.4">
+          <div class="shape-float" style="--r:-30deg; --dur:7s; --delay:-3s;">
+            <svg viewBox="0 0 100 100"><use href="#piece" fill="url(#g-peach)"></use></svg>
+          </div>
+        </div>
+
+        <div class="shape shape-mini shape-m1" data-depth="1.8">
+          <div class="shape-float" style="--r:12deg; --dur:9.5s; --delay:-4s;">
+            <svg viewBox="0 0 100 104"><use href="#cube"></use></svg>
+          </div>
+        </div>
+
+        <div class="shape shape-mini shape-m2" data-depth="2.6">
+          <div class="shape-float" style="--dur:6.5s; --delay:-2.5s;">
+            <svg viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="44" fill="url(#g-orb)" stroke="#FFFFFF" stroke-width="2"/>
+              <ellipse cx="36" cy="32" rx="12" ry="7" fill="#FFFFFF" opacity="0.85"/>
+            </svg>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -288,12 +402,11 @@
 
       <p class="badge">Free to enter</p>
 
-      <h1 class="hero-title">Echelon Young&nbsp;Innovators Hackathon 2026</h1>
+      <h1 class="hero-title">Echelon Young <span class="grad">Innovators</span> Hackathon 2026</h1>
 
       <p class="hero-tagline">
-        Nine hours. One idea. A working prototype you built yourself.
-        An inter-school hackathon for Classes 9 to 12, for students who would rather make
-        something than read about it.
+        Every big idea starts as scattered pieces. Bring your team, find the fit, and build a
+        working prototype in nine hours. An inter-school hackathon for students of Classes 9 to 12.
       </p>
 
       <!-- Countdown. Numbers are filled in by script.js -->
@@ -360,7 +473,7 @@
 
       <div>
         <p class="sec-index" data-reveal>01 / ABOUT</p>
-        <h2 data-reveal>Ideas are easy. Building one is the hard part.</h2>
+        <h2 data-reveal>Ideas are easy. Putting the pieces together is the fun part.</h2>
         <p>
           The Echelon Young Innovators Hackathon 2026 is an inter-school hackathon for students of
           Classes 9 to 12, hosted by the Department of Computer Science and Engineering at
@@ -372,8 +485,8 @@
           present what they have built to industry mentors and judges.
         </p>
         <p>
-          You do not need to have done this before. You need a team, an idea, and a willingness
-          to spend a day figuring things out.
+          You do not need to have done this before. Bring a team, an idea and some curiosity.
+          We will help you work out the rest.
         </p>
       </div>
 
@@ -414,7 +527,7 @@
         <svg class="icon" aria-hidden="true"><use href="#icon-idea"></use></svg>
         <div>
           <h3>Mentors on the floor</h3>
-          <p>Industry mentors are there through the finale to unblock you.</p>
+          <p>Industry mentors are on hand through the finale whenever you get stuck.</p>
         </div>
       </li>
       <li>
@@ -437,13 +550,13 @@
 
     <!-- Circuit traces, drawn in code. Decorative only. -->
     <svg class="circuit" viewBox="0 0 1200 300" preserveAspectRatio="none" aria-hidden="true">
-      <g fill="none" stroke="#2E4D82" stroke-width="1.4">
+      <g fill="none" stroke="#DCD0F7" stroke-width="1.4">
         <path d="M0 40 H180 L210 70 H420 L450 40 H700 L730 70 H1000 L1030 40 H1200"/>
         <path d="M0 150 H120 L150 120 H380 L410 150 H660 L690 120 H960 L990 150 H1200"/>
         <path d="M0 260 H240 L270 230 H520 L550 260 H820 L850 230 H1080 L1110 260 H1200"/>
         <path d="M210 70 V150M730 70 V120M550 260 V150M990 150 V230"/>
       </g>
-      <g fill="#2E4D82">
+      <g fill="#CDBFEE">
         <circle cx="210" cy="70" r="4"/><circle cx="450" cy="40" r="4"/>
         <circle cx="730" cy="70" r="4"/><circle cx="1030" cy="40" r="4"/>
         <circle cx="150" cy="120" r="4"/><circle cx="410" cy="150" r="4"/>
@@ -453,17 +566,17 @@
       </g>
       <!-- Two pulses of light travelling along the traces -->
       <path class="trace" d="M0 150 H120 L150 120 H380 L410 150 H660 L690 120 H960 L990 150 H1200"
-            fill="none" stroke="#FFC83D" stroke-width="2"/>
+            fill="none" stroke="#E79AB6" stroke-width="2.4"/>
       <path class="trace trace-late" d="M0 40 H180 L210 70 H420 L450 40 H700 L730 70 H1000 L1030 40 H1200"
-            fill="none" stroke="#2563EB" stroke-width="2"/>
+            fill="none" stroke="#8B73E6" stroke-width="2.4"/>
     </svg>
 
     <div class="container">
       <p class="sec-index" data-reveal>02 / TRACKS</p>
-      <h2 data-reveal>Five tracks. Pick the one your idea fits.</h2>
+      <h2 data-reveal>Five tracks. Find where your idea fits.</h2>
       <p class="section-intro" data-reveal>
-        Choose a track when you register. If your idea does not sit neatly in one of the first
-        four, Open Innovation is where it belongs.
+        Choose a track when you register. If your idea does not slot neatly into one of the
+        first four, Open Innovation is where it belongs.
       </p>
 
       <ul class="tracks" data-stagger>
@@ -502,7 +615,7 @@
             <svg class="icon" aria-hidden="true"><use href="#icon-spark"></use></svg>
           </span>
           <h3>Open Innovation</h3>
-          <p class="tk-detail">Anything else worth building. If the idea is good, bring it.</p>
+          <p class="tk-detail">The piece that fits nowhere else. If the idea is good, bring it.</p>
         </li>
       </ul>
     </div>
@@ -692,22 +805,22 @@
   <div class="ticker" aria-hidden="true">
     <div class="ticker-track">
       <span class="ticker-run">
-        <span>&#8377;37,100 PRIZE POOL</span><i>&#9671;</i>
-        <span>9 HOURS NON-STOP</span><i>&#9671;</i>
-        <span>CLASSES 9 TO 12</span><i>&#9671;</i>
-        <span>TEAMS OF 2 TO 4</span><i>&#9671;</i>
-        <span>FREE ENTRY</span><i>&#9671;</i>
-        <span>5 TRACKS</span><i>&#9671;</i>
-        <span>21 NOV 2026</span><i>&#9671;</i>
+        <span>&#8377;37,100 PRIZE POOL</span><i>&#10022;</i>
+        <span>9 HOURS NON-STOP</span><i>&#10022;</i>
+        <span>CLASSES 9 TO 12</span><i>&#10022;</i>
+        <span>TEAMS OF 2 TO 4</span><i>&#10022;</i>
+        <span>FREE ENTRY</span><i>&#10022;</i>
+        <span>5 TRACKS</span><i>&#10022;</i>
+        <span>21 NOV 2026</span><i>&#10022;</i>
       </span>
       <span class="ticker-run">
-        <span>&#8377;37,100 PRIZE POOL</span><i>&#9671;</i>
-        <span>9 HOURS NON-STOP</span><i>&#9671;</i>
-        <span>CLASSES 9 TO 12</span><i>&#9671;</i>
-        <span>TEAMS OF 2 TO 4</span><i>&#9671;</i>
-        <span>FREE ENTRY</span><i>&#9671;</i>
-        <span>5 TRACKS</span><i>&#9671;</i>
-        <span>21 NOV 2026</span><i>&#9671;</i>
+        <span>&#8377;37,100 PRIZE POOL</span><i>&#10022;</i>
+        <span>9 HOURS NON-STOP</span><i>&#10022;</i>
+        <span>CLASSES 9 TO 12</span><i>&#10022;</i>
+        <span>TEAMS OF 2 TO 4</span><i>&#10022;</i>
+        <span>FREE ENTRY</span><i>&#10022;</i>
+        <span>5 TRACKS</span><i>&#10022;</i>
+        <span>21 NOV 2026</span><i>&#10022;</i>
       </span>
     </div>
   </div>
@@ -717,9 +830,22 @@
        ============================================================ -->
   <section class="section register" id="register">
     <div class="container register-inner">
+      <!-- Two glass pieces that click together as this section comes
+           into view. Purely decorative. -->
+      <div class="snap" data-reveal aria-hidden="true">
+        <svg viewBox="0 0 200 100">
+          <path class="snap-a" fill="url(#g-lav)" stroke="#FFFFFF" stroke-width="2.5" stroke-linejoin="round"
+                d="M20 15 H100 V36 C100 36 116 32 116 50 C116 68 100 64 100 64 V85 H20 Z"/>
+          <path class="snap-b" fill="url(#g-icy)" stroke="#FFFFFF" stroke-width="2.5" stroke-linejoin="round"
+                d="M100 15 H180 V85 H100 V64 C100 64 116 68 116 50 C116 32 100 36 100 36 Z"/>
+          <circle class="snap-flash" cx="108" cy="50" r="14" fill="#FFFFFF"/>
+        </svg>
+      </div>
+
       <h2 data-reveal>Registration closes 30 October 2026</h2>
       <p>
-        Get your team of two to four together and sign up on Unstop. Registration is free.
+        Every team is a puzzle that needs the right pieces. Find your two to four, then sign up
+        on Unstop. Registration is free.
         Any questions, call <a href="tel:+919310268975">+91 93102 68975</a>.
       </p>
       <a href="https://unstop.com/p/echelon-young-innovators-hackathon-2026-echelon-institute-of-technology-1768767"
@@ -732,8 +858,11 @@
        ============================================================ -->
   <section class="section" id="faqs">
     <div class="container faq-grid">
-      <p class="sec-index" data-reveal>06 / FAQ</p>
+      <div>
+        <p class="sec-index" data-reveal>06 / FAQ</p>
         <h2 data-reveal>Questions</h2>
+        <p data-reveal>Tap a question to open it. Still stuck? The numbers to call are at the end.</p>
+      </div>
 
       <div class="faq-list" data-stagger>
         <details>
@@ -766,8 +895,8 @@
 
         <details>
           <summary>Do I need to know how to code already?</summary>
-          <p>Some coding ability in the team helps, but the hackathon is aimed at Class 9 to 12
-             students and beginners are welcome.</p>
+          <p>Some coding ability in the team helps, but the hackathon is built for Class 9 to 12
+             students and beginners are very welcome. Mentors are there to help on the day.</p>
         </details>
 
         <details>
