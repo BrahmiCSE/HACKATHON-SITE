@@ -430,16 +430,140 @@ p { color: var(--ink-dim); }
   position: absolute;
   inset: 12%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(185, 165, 246, 0.55), rgba(247, 202, 216, 0.25) 50%, transparent 70%);
-  filter: blur(24px);
+  background: radial-gradient(circle, rgba(139, 105, 240, 0.6), rgba(240, 160, 200, 0.3) 50%, transparent 72%);
+  filter: blur(28px);
   z-index: -1;
 }
 
 .shape-cube svg {
-  filter:
-    drop-shadow(0 26px 30px rgba(76, 52, 150, 0.3))
-    drop-shadow(0 0 30px rgba(185, 165, 246, 0.5));
+  filter: drop-shadow(0 0 30px rgba(185, 165, 246, 0.5));
 }
+
+/* --- The 3D glass cube ---
+   Eight small glass blocks, two by two by two. The whole group turns
+   slowly, and every few seconds the blocks drift apart and click back
+   together like puzzle pieces. Sizes use cqw (a percentage of the
+   cube's own width), so it scales on any screen. */
+@property --gap {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
+.cube3d {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  container-type: inline-size;
+  perspective: 1100px;
+}
+
+.cube3d-fallback { width: 100%; height: auto; display: block; }
+
+.c3-rot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  transform: rotateX(-26deg) rotateY(-38deg);
+  animation: c3-turn 26s linear infinite;
+  --s: 27cqw;                 /* size of one small block */
+  --gap: 0.6cqw;
+}
+
+@keyframes c3-turn {
+  from { transform: rotateX(-26deg) rotateY(-38deg); }
+  to   { transform: rotateX(-26deg) rotateY(322deg); }
+}
+
+/* The blocks part and rejoin. Held together most of the time, so it
+   reads as one cube that occasionally shows how it is built. */
+.c3-rot.is-breathing { animation: c3-turn 26s linear infinite, c3-split 7s ease-in-out infinite; }
+
+@keyframes c3-split {
+  0%, 50%, 100% { --gap: 0.6cqw; }
+  70%           { --gap: 7cqw; }
+  82%           { --gap: 7cqw; }
+  92%           { --gap: 0cqw; }    /* a tiny overshoot: the click */
+}
+
+.c3-cell {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform-style: preserve-3d;
+  transform: translate3d(
+    calc(var(--x) * (var(--s) / 2 + var(--gap) / 2)),
+    calc(var(--y) * (var(--s) / 2 + var(--gap) / 2)),
+    calc(var(--z) * (var(--s) / 2 + var(--gap) / 2)));
+}
+
+.c3-face {
+  position: absolute;
+  width: var(--s);
+  height: var(--s);
+  margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
+  border-radius: 3px;
+  box-shadow:
+    inset 0 0 1.8cqw rgba(255, 255, 255, 0.7),
+    0 0 2.4cqw rgba(124, 92, 235, 0.45);
+  backface-visibility: visible;    /* glass: you can see the far side */
+  overflow: visible;
+}
+
+/* A band of light across every face, the way glass catches it */
+.c3-face::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(125deg, transparent 30%, rgba(255, 255, 255, 0.55) 46%, transparent 60%);
+}
+
+/* A jigsaw tab on the outer faces, sitting on the seam */
+.c3-face.has-tab::after {
+  content: "";
+  position: absolute;
+  width: 34%;
+  height: 34%;
+  border-radius: 50%;
+  background: inherit;
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 0 1cqw rgba(255, 255, 255, 0.7);
+}
+
+.c3-face.tab-r::after { right: -17%; top: 33%; }
+.c3-face.tab-l::after { left: -17%;  top: 33%; }
+.c3-face.tab-b::after { bottom: -17%; left: 33%; }
+.c3-face.tab-t::after { top: -17%;    left: 33%; }
+
+/* Each direction gets its own glass tint from the palette */
+.c3-front  { background: linear-gradient(160deg, rgba(167, 139, 250, 0.62), rgba(240, 150, 190, 0.55)); transform: translateZ(calc(var(--s) / 2)); }
+.c3-back   { background: linear-gradient(160deg, rgba(139, 115, 230, 0.4), rgba(120, 175, 235, 0.38)); transform: rotateY(180deg) translateZ(calc(var(--s) / 2)); }
+.c3-right  { background: linear-gradient(200deg, rgba(125, 185, 245, 0.66), rgba(124, 92, 235, 0.62));  transform: rotateY(90deg) translateZ(calc(var(--s) / 2)); }
+.c3-left   { background: linear-gradient(200deg, rgba(150, 120, 245, 0.5), rgba(240, 160, 200, 0.45));  transform: rotateY(-90deg) translateZ(calc(var(--s) / 2)); }
+.c3-top    { background: linear-gradient(135deg, rgba(255, 255, 255, 0.78), rgba(186, 166, 252, 0.66)); transform: rotateX(90deg) translateZ(calc(var(--s) / 2)); }
+.c3-bottom { background: linear-gradient(135deg, rgba(139, 115, 230, 0.45), rgba(125, 185, 245, 0.42)); transform: rotateX(-90deg) translateZ(calc(var(--s) / 2)); }
+
+/* A pool of light under the cube, like the reference picture */
+.cube3d::after {
+  content: "";
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  bottom: -4%;
+  height: 7%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(124, 92, 235, 0.7), transparent 70%);
+  filter: blur(7px);
+  pointer-events: none;
+}
+
+/* The 3D cube already has its own light and shadow */
+.shape-cube svg.cube3d-fallback { filter: drop-shadow(0 26px 30px rgba(76, 52, 150, 0.3)); }
 
 /* Placement of the smaller pieces around the cube */
 .shape-p1 { left: 22%; top: -2%; width: 20%; }
@@ -1515,6 +1639,112 @@ p { color: var(--ink-dim); }
   .promo-card { transition: none; }
 }
 
+/* --- College name with the college logo beside it --- */
+.inst { white-space: nowrap; }
+
+/* Long names may still wrap on a phone, rather than overflow */
+@media (max-width: 700px) { .inst { white-space: normal; } }
+
+/* The college logo. Put the file at images/college-logo.png.
+   If the file is missing, script-free fallback: the image removes
+   itself (onerror in the HTML), so no broken icon ever shows. */
+.inst-mark {
+  display: inline-block;
+  height: 1.4em;
+  width: auto;
+  max-width: 3em;
+  object-fit: contain;
+  margin-right: 0.4em;
+  vertical-align: -0.35em;
+}
+
+/* --- Full college and university logo --- */
+.org-card {
+  display: inline-block;
+  margin-top: 22px;
+  padding: 16px 20px;
+  background-color: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow-soft);
+}
+
+.org-lockup {
+  display: block;
+  width: 100%;
+  max-width: 380px;
+  height: auto;
+}
+
+.org-lockup-footer {
+  max-width: 260px;
+  margin-bottom: 16px;
+}
+
+/* --- Contact background: a jigsaw grid with signals on the seams --- */
+#contact { position: relative; overflow: hidden; }
+
+#contact .container { position: relative; z-index: 1; }
+
+.jigsaw {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.85;
+  /* Fades the grid out towards the left, where the text sits */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.35) 35%, #000 70%);
+          mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.35) 35%, #000 70%);
+}
+
+/* pathLength is not set, so the dash numbers are in real units.
+   A short bright dash, then a long gap, travels the full seam. */
+.seam-run {
+  stroke-linecap: round;
+  stroke-dasharray: 120 3000;
+  stroke-dashoffset: 3120;
+  animation: seam-run 9s linear infinite;
+}
+
+.seam-run-2 { animation-duration: 7s; animation-delay: 2s; }
+.seam-run-3 { animation-duration: 11s; animation-delay: 4.5s; animation-direction: reverse; }
+
+@keyframes seam-run {
+  to { stroke-dashoffset: 0; }
+}
+
+/* --- Ripple rings behind the contact card --- */
+.contact-wrap { position: relative; }
+
+.contact-wrap .contact-details { position: relative; z-index: 1; }
+
+.ping {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 260px;
+  height: 260px;
+  margin: -130px 0 0 -130px;
+  border-radius: 50%;
+  border: 2px solid rgba(139, 115, 230, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  animation: ping 4.5s ease-out infinite;
+}
+
+.ping-2 { animation-delay: 1.5s; border-color: rgba(231, 154, 182, 0.45); }
+.ping-3 { animation-delay: 3s;   border-color: rgba(111, 174, 221, 0.45); }
+
+@keyframes ping {
+  0%   { transform: scale(0.6); opacity: 0.9; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seam-run, .ping { animation: none; opacity: 0; }
+}
+
 /* =========== 13. MOBILE ADJUSTMENTS ================= */
 @media (max-width: 860px) {
 
@@ -1803,4 +2033,5 @@ p { color: var(--ink-dim); }
   [data-stagger] > *,
   .podium[data-stagger] > .pod .pod-block { opacity: 1; transform: none; }
   .snap-a, .snap-b { transform: none; }
+  .c3-rot { --gap: 0.6cqw; }
 }

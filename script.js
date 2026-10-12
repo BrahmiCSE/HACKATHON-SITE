@@ -252,9 +252,82 @@ function initHeroScene() {
 
 
 /* -----------------------------------------------------------
+   3b. 3D GLASS CUBE
+
+   Builds the big cube in the hero out of eight glass blocks, each
+   with six faces, so it is genuinely three dimensional and can turn.
+   All the look and movement live in the stylesheet; this only
+   creates the pieces. If anything here fails, the flat drawing that
+   is already in the HTML stays on screen.
+   ----------------------------------------------------------- */
+function initCube3D() {
+  var holder = document.getElementById("cube3d");
+  if (!holder) { return; }
+
+  // Needs 3D transforms and container units. Very old browsers keep
+  // the flat drawing.
+  if (!window.CSS || !CSS.supports("width", "1cqw") ||
+      !CSS.supports("transform-style", "preserve-3d")) {
+    return;
+  }
+
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  var rot = document.createElement("div");
+  rot.className = "c3-rot" + (reduced ? "" : " is-breathing");
+
+  var FACES = ["front", "back", "right", "left", "top", "bottom"];
+
+  // Which edge of each outer face gets a jigsaw tab, so the tabs sit
+  // on the seams between blocks. Worked out per block position.
+  function tabFor(face, x, y, z) {
+    if (face === "front")  { return x < 0 ? "tab-r" : null; }
+    if (face === "back")   { return x < 0 ? "tab-l" : null; }
+    if (face === "right")  { return z > 0 ? "tab-r" : null; }
+    if (face === "left")   { return z < 0 ? "tab-r" : null; }
+    if (face === "top")    { return y < 0 && z < 0 ? "tab-b" : null; }
+    return null;
+  }
+
+  // Is this face on the outside of the big cube?
+  function isOuter(face, x, y, z) {
+    return (face === "front" && z > 0) || (face === "back" && z < 0) ||
+           (face === "right" && x > 0) || (face === "left" && x < 0) ||
+           (face === "top" && y < 0)   || (face === "bottom" && y > 0);
+  }
+
+  [-1, 1].forEach(function (x) {
+    [-1, 1].forEach(function (y) {
+      [-1, 1].forEach(function (z) {
+        var cell = document.createElement("div");
+        cell.className = "c3-cell";
+        cell.style.setProperty("--x", x);
+        cell.style.setProperty("--y", y);
+        cell.style.setProperty("--z", z);
+
+        FACES.forEach(function (face) {
+          var el = document.createElement("div");
+          el.className = "c3-face c3-" + face;
+          var tab = isOuter(face, x, y, z) ? tabFor(face, x, y, z) : null;
+          if (tab) { el.className += " has-tab " + tab; }
+          cell.appendChild(el);
+        });
+
+        rot.appendChild(cell);
+      });
+    });
+  });
+
+  holder.innerHTML = "";
+  holder.appendChild(rot);
+}
+
+
+/* -----------------------------------------------------------
    4. FLIP CARDS
 
    Each card in "Who can take part" turns over when pressed.
+   Opening one turns any other open card back over.
    The cards are buttons, so Enter and Space already work and
    screen readers announce them. All this does is flip the
    aria-expanded value; the CSS does the turning.
@@ -264,8 +337,15 @@ function initFlipCards() {
 
   for (var i = 0; i < cards.length; i++) {
     cards[i].addEventListener("click", function () {
-      var open = this.getAttribute("aria-expanded") === "true";
-      this.setAttribute("aria-expanded", open ? "false" : "true");
+      var wasOpen = this.getAttribute("aria-expanded") === "true";
+
+      // Turn every card back to its front first, so only one is ever open
+      for (var k = 0; k < cards.length; k++) {
+        cards[k].setAttribute("aria-expanded", "false");
+      }
+
+      // Then open this one, unless it was the open one being closed
+      if (!wasOpen) { this.setAttribute("aria-expanded", "true"); }
     });
   }
 }
@@ -375,6 +455,39 @@ function initReveal() {
   for (var j = 0; j < targets.length; j++) {
     watcher.observe(targets[j]);
   }
+}
+
+
+/* -----------------------------------------------------------
+   6b. PUZZLE SNAP
+
+   The two pieces above "Registration closes" click together every
+   time they come into view, and drift apart again once they leave,
+   so the snap replays each time someone scrolls back to it.
+   ----------------------------------------------------------- */
+function initSnap() {
+  var snap = document.getElementById("snap");
+  if (!snap) { return; }
+
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // No motion wanted, or a very old browser: just show them joined
+  if (reduced || typeof window.IntersectionObserver !== "function") {
+    snap.classList.add("is-revealed");
+    return;
+  }
+
+  var watcher = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        snap.classList.add("is-revealed");
+      } else {
+        snap.classList.remove("is-revealed");
+      }
+    });
+  }, { threshold: 0.6 });
+
+  watcher.observe(snap);
 }
 
 
@@ -717,11 +830,13 @@ function initYear() {
 initPromo();
 initCountdown();
 initMenu();
+initCube3D();
 initHeroScene();
 initFlipCards();
 initTimeline();
 initHud();
 initReveal();
+initSnap();
 initTrackSpotlight();
 initCursor();
 initYear();
