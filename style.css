@@ -942,12 +942,17 @@ p { color: var(--ink-dim); }
 
 
 /* =========== 8. ELIGIBILITY (flip cards) ============ */
+/* Three to a row. Flex instead of grid so a shorter last row sits
+   in the middle rather than leaving a gap on the right. */
 .rules {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 20px;
   margin-top: 36px;
 }
+
+.rules > .rule { flex: 0 0 calc((100% - 40px) / 3); }
 
 .rule {
   appearance: none;
@@ -1768,7 +1773,7 @@ p { color: var(--ink-dim); }
 
   .codewin .ln { width: 18px; margin-right: 8px; }
 
-  .rules { grid-template-columns: 1fr; }
+  .rules > .rule { flex-basis: 100%; }
 
   /* Tracks turn into a vertical list */
   .tracks {
