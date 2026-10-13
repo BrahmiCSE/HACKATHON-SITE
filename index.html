@@ -31,12 +31,27 @@
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
 
-    <img class="promo-img" src="images/poster.jpg" width="800" height="1000"
-         alt="Echelon Young Innovators Hackathon 2026 poster. Registration 12 to 30 October 2026.
-              Online round 31 October to 5 November. Offline round 21 November at Echelon Institute
-              of Technology, Faridabad. Prizes of 21,000, 11,000 and 5,100 rupees.">
+    <!-- The popup is built from text, not a picture, so it always
+         loads and screen readers can read every detail. -->
+    <p class="promo-eyebrow">Echelon Young Innovators Hackathon 2026</p>
+    <h2 class="promo-title" id="promo-title">Registration is open</h2>
+    <p class="promo-sub">Free to enter &middot; Classes 9 to 12 &middot; Teams of 2 to 4</p>
 
-    <h2 class="promo-title" id="promo-title">Registration opens 12 October</h2>
+    <div class="promo-prize">
+      <p class="promo-prize-label">Prize pool</p>
+      <p class="promo-prize-total">&#8377;37,100</p>
+      <ul class="promo-prize-split">
+        <li><span>1st</span>&#8377;21,000</li>
+        <li><span>2nd</span>&#8377;11,000</li>
+        <li><span>3rd</span>&#8377;5,100</li>
+      </ul>
+    </div>
+
+    <dl class="promo-dates">
+      <div><dt>Registration</dt><dd>12 to 30 Oct</dd></div>
+      <div><dt>Online round</dt><dd>31 Oct to 5 Nov</dd></div>
+      <div><dt>Grand finale</dt><dd>21 Nov, on campus</dd></div>
+    </dl>
 
     <div class="promo-actions">
       <a class="btn"

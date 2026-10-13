@@ -753,8 +753,14 @@ function initPromo() {
 
   var DELAY = 2000;          // how long after load it appears
 
+  // The popup advertises registration, so once registration has
+  // closed it stops appearing on its own.
+  var REGISTRATION_CLOSES = new Date("2026-10-30T23:59:59+05:30").getTime();
+
   var forced = window.location.search.indexOf("popup=1") !== -1 ||
                window.location.hash === "#popup";
+
+  if (!forced && Date.now() > REGISTRATION_CLOSES) { return; }
 
   if (!forced) {
     try {

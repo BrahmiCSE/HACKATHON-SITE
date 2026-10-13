@@ -1566,10 +1566,10 @@ p { color: var(--ink-dim); }
 .promo-card {
   position: relative;
   width: 100%;
-  max-width: 380px;
+  max-width: 400px;
   max-height: calc(100vh - 48px);
   overflow-y: auto;
-  padding: 16px 16px 20px;
+  padding: 22px 22px 22px;
   border-radius: 20px;
   border: 1px solid var(--line);
   background-color: var(--surface);
@@ -1581,17 +1581,101 @@ p { color: var(--ink-dim); }
 
 .promo.is-open .promo-card { transform: none; }
 
-.promo-img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 12px;
+.promo-eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lavender-deep);
+  margin: 8px 40px 8px 0;   /* room for the close button */
+  text-align: left;
 }
 
 .promo-title {
-  font-size: 19px;
-  margin: 16px 0 14px;
+  font-size: 26px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin: 0 0 6px;
+  text-align: left;
 }
+
+.promo-sub {
+  font-size: 14px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+/* The prize pool, the thing most people want to see first */
+.promo-prize {
+  padding: 16px 14px 14px;
+  border-radius: 14px;
+  border: 1px solid var(--line-strong);
+  background: linear-gradient(160deg, var(--lavender-soft), transparent 120%);
+  margin-bottom: 16px;
+}
+
+.promo-prize-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.promo-prize-total {
+  font-family: var(--mono);
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--lavender-deep);
+  margin: 2px 0 12px;
+}
+
+.promo-prize-split {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.promo-prize-split li {
+  flex: 1;
+  padding: 7px 4px;
+  border-radius: 10px;
+  background-color: var(--surface);
+  border: 1px solid var(--line);
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.promo-prize-split span {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+
+/* Key dates, as a short table */
+.promo-dates {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+.promo-dates div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed var(--line);
+  font-size: 14px;
+}
+
+.promo-dates dt { color: var(--ink-dim); }
+.promo-dates dd { font-family: var(--mono); font-weight: 700; color: var(--ink); }
 
 .promo-actions {
   display: flex;
@@ -1604,8 +1688,8 @@ p { color: var(--ink-dim); }
 
 .promo-close {
   position: absolute;
-  top: 24px;
-  right: 24px;
+  top: 14px;
+  right: 14px;
   z-index: 1;
   display: flex;
   align-items: center;
@@ -1636,7 +1720,7 @@ p { color: var(--ink-dim); }
 @media (max-width: 700px) {
   .promo { padding: 16px; }
   .promo-card { max-width: 320px; }
-  .promo-close { top: 20px; right: 20px; }
+  .promo-close { top: 12px; right: 12px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
